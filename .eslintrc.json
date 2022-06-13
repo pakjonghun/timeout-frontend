@@ -21,6 +21,7 @@
       {
         "additionalHooks": "useRecoilCallback"
       }
-    ]
+    ],
+    "@typescript-eslint/no-var-requires": "off"
   }
 }

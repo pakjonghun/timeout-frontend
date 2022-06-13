@@ -1,14 +1,14 @@
-const { resolve } = require("path");
-const Dotenv = require("dotenv-webpack");
-const commonConfig = require("./webpack.config.common");
-const { merge } = require("webpack-merge");
+const { resolve } = require('path');
+const Dotenv = require('dotenv-webpack');
+const commonConfig = require('./webpack.config.common');
+const { merge } = require('webpack-merge');
 
 module.exports = merge(commonConfig, {
-  devtool: "source-map",
-  mode: "development",
+  devtool: 'source-map',
+  mode: 'development',
   devServer: {
     static: {
-      directory: resolve(__dirname, "public"),
+      directory: resolve(__dirname, 'public'),
     },
     compress: true,
     port: 3000,
@@ -19,8 +19,8 @@ module.exports = merge(commonConfig, {
     rules: [
       {
         test: /\.css$/,
-        include: resolve(__dirname, "src"),
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        include: resolve(__dirname, 'src'),
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },
