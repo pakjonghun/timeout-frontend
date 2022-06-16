@@ -13,6 +13,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', 'json'],
     alias: {
+      '@assets': resolve(__dirname, 'assets'),
+      '@models': resolve(__dirname, 'src', 'models'),
+      '@redux': resolve(__dirname, 'src', 'redux'),
       '@routers': resolve(__dirname, 'src', 'routers'),
       '@hooks': resolve(__dirname, 'src', 'hooks'),
       '@pages': resolve(__dirname, 'src', 'pages'),
@@ -22,6 +25,7 @@ module.exports = {
   },
   module: {
     rules: [
+      { test: /\.(jpg|jpge)$/, type: 'asset' },
       {
         test: /\.tsx?$/,
         use: [{ loader: 'babel-loader' }],
