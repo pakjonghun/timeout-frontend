@@ -1,18 +1,94 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import TextInput from '@components/TextInput';
 import AuthLayout from '@components/AuthLayout';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ConfirmButton from '@components/ConfirmButton';
+import { useForm } from 'react-hook-form';
+import { loginForm } from '@models/user';
+import ErrorMessage from '@components/ErrorMessage';
+import { useLoginMutation } from '@redux/services/userApi';
+import { toast } from 'react-toastify';
+import usePublic from '@hooks/usePublic';
+import { useAppDispatch } from '@hooks/useRedux';
+import { setIsLogin } from '@redux/features/user';
 
 const Login = () => {
+  const { state } = useLocation();
+  const dispatch = useAppDispatch();
+  const parsedState = state as { email: string | undefined; password: string | undefined };
+  const navigate = useNavigate();
+  const { isLoading: isMeLoading } = usePublic();
+  const [loginMuataion, { isLoading, error, isSuccess }] = useLoginMutation();
+
+  useEffect(() => {
+    if (error) toast.error((error as { data: { message: string } }).data.message);
+  }, [error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('로그인 성공 했습니다.');
+      dispatch(setIsLogin(true));
+      navigate('/');
+    }
+  }, [dispatch, isSuccess, navigate]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<loginForm>({
+    mode: 'onChange',
+    defaultValues: {
+      email: parsedState?.email || '',
+      password: parsedState?.password || '',
+    },
+  });
+
+  useEffect(() => {
+    if (error) toast.error((error as { data: { message: string } }).data.message);
+  }, [error]);
+
+  const onValid = useCallback(
+    (data: loginForm) => {
+      loginMuataion(data);
+    },
+    [loginMuataion],
+  );
+
+  if (isMeLoading) return null;
+
   return (
     <AuthLayout
       classes="inset-y-0"
       image="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/945985a0-a262-42ad-4250-da716e3cdb00/origin"
     >
-      <form className="w-full space-y-8">
-        <TextInput id="email" />
-        <TextInput id="password" />
+      <form onSubmit={handleSubmit(onValid)} className="w-full space-y-8">
+        <TextInput
+          id="email"
+          register={register('email', {
+            required: '이메일을 입력하세요',
+            pattern: {
+              value: /^[a-zA-Z0-9]{1,20}\@[a-zA-Z0-9]{1,20}\.[a-zA-Z]{1,10}$/,
+              message: '이메일 형식이 올바르지 않습니다.',
+            },
+            validate: {
+              isSpace: (v: string) => !/[\s]/.test(v) || '공백은 포함할 수 없습니다.',
+            },
+          })}
+        />
+        <ErrorMessage errorMessage={errors.email?.message} />
+        <TextInput
+          id="password"
+          register={register('password', {
+            required: '비밀번호를 입력하세요',
+            maxLength: { value: 10, message: '비밀번호는 10자리 이하 입니다.' },
+            minLength: { value: 2, message: '비밀번호는 2자리 이상 입니다.' },
+            validate: {
+              isSpace: (v: string) => !/[\s]/.test(v) || '공백은 포함할 수 없습니다.',
+            },
+          })}
+        />
+        <ErrorMessage errorMessage={errors.password?.message} />
         <div>
           <ConfirmButton title="login" />
         </div>

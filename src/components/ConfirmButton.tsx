@@ -15,7 +15,7 @@ const ConfirmButton: React.FC<props> = ({ classes, title, role = 'save', type = 
       {...(onClick && { onClick })}
       type={type}
       className={joinStyle(
-        'first-letter:uppercase px-5 py-2 rounded-md shadow-md font-medium text-sm hover:ring-1 focus:ring-0 transition-all duration-75',
+        'first-letter:uppercase px-5 py-2 rounded-md shadow-md font-medium text-sm hover:ring-1 active:ring-0 transition-all duration-75',
         role == 'save' ? 'bg-pink-500 text-pink-50 ring-pink-500' : 'bg-gray-50 text-gray-800 ring-gray-200',
         classes ? classes : '',
       )}

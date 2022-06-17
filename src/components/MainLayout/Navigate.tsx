@@ -1,10 +1,23 @@
-import React from 'react';
-import { userMenuList, adminMenuList, subMenuList } from '@models/menus';
+import React, { useCallback, useEffect } from 'react';
+import { userMenuList, adminMenuList, subMenuList, logout } from '@models/menus';
 import { Link } from 'react-router-dom';
 import Menu from './Menu';
+import { useAppDispatch } from '@hooks/useRedux';
+import { logoutFetch } from '@redux/features/user';
+import { toast } from 'react-toastify';
+import usePrivate from '@hooks/usePrivate';
 
 const Navigate = () => {
   const isAdmin = true;
+  const dispatch = useAppDispatch();
+
+  const { isLoading: isMeLoading } = usePrivate();
+
+  const onLogoutClick = useCallback(() => {
+    dispatch(logoutFetch());
+  }, [dispatch]);
+
+  if (isMeLoading) return null;
 
   return (
     <div className="flex justify-between py-2 px-4 sm:px-10 border-b-2">
@@ -26,6 +39,7 @@ const Navigate = () => {
         {subMenuList.map(({ id, ...props }) => (
           <Menu key={id} {...props} />
         ))}
+        <Menu icon={logout.icon} link={logout.link} title={logout.title} onClick={onLogoutClick} />
       </ul>
     </div>
   );

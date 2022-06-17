@@ -1,3 +1,4 @@
+import usePrivate from '@hooks/usePrivate';
 import { useAppSelector } from '@hooks/useRedux';
 import React from 'react';
 import Navigate from './Navigate';
@@ -9,6 +10,10 @@ interface props {
 
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
+
+  // const { isLoading } = usePrivate();
+
+  // if (isLoading) return null;
 
   return (
     <section className="mx-auto max-w-screen-lg">

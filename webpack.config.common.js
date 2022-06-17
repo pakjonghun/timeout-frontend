@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/index.tsx',
   output: {
-    path: resolve(__dirname, 'public'),
+    path: resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].bundle.js',
     clean: true,
     publicPath: '/',

@@ -6,14 +6,16 @@ interface props {
   link: string;
   title?: string;
   icon: React.ReactNode;
+  onClick?: () => void;
 }
 
-const Menu: React.FC<props> = ({ link, title, icon }) => {
+const Menu: React.FC<props> = ({ link, title, icon, onClick }) => {
   const { pathname } = useLocation();
 
   return (
-    <li className="">
+    <li>
       <Link
+        {...(onClick && { onClick })}
         className={joinStyle(
           'focus:fill-gray-600 group fill-gray-400 flex flex-col items-center space-y-1 hover:fill-gray-800',
           pathname === link || (pathname === '/avatar' && link === '/profile') ? 'fill-gray-800' : '',
