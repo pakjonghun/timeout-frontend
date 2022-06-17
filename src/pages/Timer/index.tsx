@@ -16,13 +16,8 @@ const Timer = () => {
       toast(msg);
     });
 
-    socket.on('error', (msg) => {
-      toast.error(msg);
-    });
-
     return () => {
       socket.off('login');
-      socket.off('error');
     };
   }, []);
 

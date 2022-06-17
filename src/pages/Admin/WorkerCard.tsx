@@ -18,7 +18,7 @@ const WorkerCard: React.FC<props> = ({ index, user: { name, email, phone, workTi
   return (
     <article
       className={joinStyle(
-        'relative flex flex-col justify-center items-center max-w-[12rem] py-3 px-2 space-y-3 rounded-md shadow-md',
+        'relative flex flex-col justify-center items-center scale-90 sm:scale-100 max-w-[11rem] py-3 px-2 space-y-3 rounded-md shadow-md',
         workerCards[index].bgColor,
       )}
     >

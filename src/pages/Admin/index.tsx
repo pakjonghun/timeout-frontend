@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import MainLayout from '@components/MainLayout';
 import WorkerCard from './WorkerCard';
 import Table from '@components/Table';
 import { adminRecordTableHeadByUser } from '@models/tables';
+import NoticeForm from './NoticeForm';
 
 const Admin = () => {
   return (
     <MainLayout title="Admin">
-      <section>
+      <section className="space-y-5">
         <header className="grid grid-cols-3 max-w-[40rem] mx-auto pt-10">
           <WorkerCard
             index={'1'}
@@ -23,7 +24,10 @@ const Admin = () => {
           />
         </header>
         <main>
-          <Table thead={adminRecordTableHeadByUser} tbody={Array(7).fill(0)} />
+          <div className="flex flex-col w-fit mx-auto space-y-5">
+            <NoticeForm />
+            <Table thead={adminRecordTableHeadByUser} tbody={Array(7).fill(0)} />
+          </div>
         </main>
       </section>
     </MainLayout>

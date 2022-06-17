@@ -13,14 +13,14 @@ const Sticker: React.FC<props> = ({ classes, title, index }) => {
   return (
     <div
       className={joinStyle(
-        'rounded-full first-letter:uppercase',
+        'rounded-full first-letter:uppercase font-bold',
         stickerCategory[title].bgColor,
         stickerCategory[title].textColor,
         classes ? classes : '',
         index ? workerCards[index].stickerBgColor : '',
       )}
     >
-      {title}
+      {title.toUpperCase()}
     </div>
   );
 };

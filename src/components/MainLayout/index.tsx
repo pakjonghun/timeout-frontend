@@ -1,8 +1,11 @@
 import useLoginSocket from '@hooks/useLoginSocket';
 import usePrivate from '@hooks/usePrivate';
 import { useAppSelector } from '@hooks/useRedux';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import socket from '../../socket.io';
 import Navigate from './Navigate';
+import WorkingImage from './WorkingImage';
 
 interface props {
   children: React.ReactNode;
@@ -15,6 +18,20 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
   const { isLoading, data } = usePrivate();
   useLoginSocket(data?.data.id, data?.data.role);
 
+  useEffect(() => {
+    socket.on('error', (msg) => {
+      toast.error(msg);
+    });
+
+    socket.on('notice', (msg) => {
+      toast(msg);
+    });
+
+    return () => {
+      socket.off('error');
+    };
+  }, []);
+
   if (isLoading) return null;
 
   return (
@@ -22,13 +39,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
       <header className="relative">
         <Navigate />
         <div className="absolute right-5 -bottom-10 md:-bottom-28">
-          {isWorking && (
-            <img
-              className="animate-bounce w-32 md:w-52 "
-              src="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/de2a2e47-4d52-479e-7e58-e2a1ee267900/medium"
-              alt="working"
-            />
-          )}
+          <WorkingImage isWorking={isWorking} />
         </div>
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>
       </header>
