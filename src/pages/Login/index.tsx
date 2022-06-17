@@ -10,7 +10,6 @@ import { useLoginMutation } from '@redux/services/userApi';
 import { toast } from 'react-toastify';
 import usePublic from '@hooks/usePublic';
 import { useAppDispatch } from '@hooks/useRedux';
-import { setIsLogin } from '@redux/features/user';
 import socket from '../../socket.io';
 
 const Login = () => {
@@ -22,17 +21,17 @@ const Login = () => {
   const [loginMuataion, { isLoading, error, isSuccess }] = useLoginMutation();
 
   useEffect(() => {
-    if (error) toast.error((error as { data: { message: string } }).data.message);
+    if (error) toast.error((error as { error: string }).error);
+    console.log('login error', error);
   }, [error]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
       toast.success('로그인 성공 했습니다.');
-      console.log(data);
       socket.emit('login', { id: data?.data.id, role: data?.data.role });
       navigate('/');
     }
-  }, [dispatch, isLoading, isSuccess, navigate]);
+  }, [dispatch, isLoading, isSuccess, navigate, data]);
 
   const {
     register,
@@ -45,10 +44,6 @@ const Login = () => {
       password: parsedState?.password || '',
     },
   });
-
-  useEffect(() => {
-    if (error) toast.error((error as { data: { message: string } }).data.message);
-  }, [error]);
 
   const onValid = useCallback(
     (data: loginForm) => {

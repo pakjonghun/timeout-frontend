@@ -3,9 +3,7 @@ import { userMenuList, adminMenuList, subMenuList, logout } from '@models/menus'
 import { Link, useNavigate } from 'react-router-dom';
 import Menu from './Menu';
 import { useAppDispatch } from '@hooks/useRedux';
-import { logoutFetch, setIsLogin } from '@redux/features/user';
 import { toast } from 'react-toastify';
-import usePrivate from '@hooks/usePrivate';
 import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 
 const Navigate = () => {

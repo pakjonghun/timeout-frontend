@@ -6,6 +6,7 @@ import Routers from './routers';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/tailwind.css';
 import { ToastContainer } from 'react-toastify';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
 

@@ -6,7 +6,7 @@ const userApi = api.injectEndpoints({
     join: build.mutation<joinResponse, joinForm>({
       query(body) {
         return {
-          url: 'users',
+          url: '/users',
           method: 'POST',
           body,
         };
@@ -15,7 +15,7 @@ const userApi = api.injectEndpoints({
     login: build.mutation<userResponse, loginForm>({
       query(body) {
         return {
-          url: 'users/login',
+          url: '/users/login',
           method: 'POST',
           body,
         };
@@ -30,7 +30,7 @@ const userApi = api.injectEndpoints({
     logout: build.mutation<userResponse, void>({
       query() {
         return {
-          url: 'users/logout',
+          url: '/users/logout',
           method: 'POST',
         };
       },

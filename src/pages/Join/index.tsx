@@ -5,7 +5,7 @@ import AuthLayout from '@components/AuthLayout';
 import ConfirmButton from '@components/ConfirmButton';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from '@components/ErrorMessage';
-import { joinForm, joinResponse } from '@models/user';
+import { joinForm } from '@models/user';
 import { useJoinMutation } from '@redux/services/userApi';
 import { toast } from 'react-toastify';
 import usePublic from '@hooks/usePublic';
@@ -32,7 +32,7 @@ const Join = () => {
   );
 
   useEffect(() => {
-    if (error) toast.error((error as { data: joinResponse }).data.message);
+    if (error) toast.error((error as { error: string }).error);
   }, [error]);
 
   useEffect(() => {
