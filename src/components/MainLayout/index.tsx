@@ -23,12 +23,18 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
       toast.error(msg);
     });
 
+    socket.on('workingUsers', (workingUsers) => {
+      console.log(workingUsers);
+    });
+
     socket.on('notice', (msg) => {
       toast(msg);
     });
 
     return () => {
       socket.off('error');
+      socket.off('notice');
+      socket.off('workingUsers');
     };
   }, []);
 

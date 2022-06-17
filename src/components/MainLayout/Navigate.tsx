@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 
 const Navigate = () => {
-  const isAdmin = true;
+  const { data: myInfo } = useGetMyInfoQuery();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -37,7 +37,7 @@ const Navigate = () => {
             />
           </Link>
         </li>
-        {(isAdmin ? adminMenuList : userMenuList).map(({ id, ...props }) => {
+        {(myInfo && myInfo.data.role === 'Manager' ? adminMenuList : userMenuList).map(({ id, ...props }) => {
           return <Menu key={id} {...props} />;
         })}
       </ul>
