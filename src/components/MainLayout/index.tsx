@@ -1,3 +1,4 @@
+import useLoginSocket from '@hooks/useLoginSocket';
 import usePrivate from '@hooks/usePrivate';
 import { useAppSelector } from '@hooks/useRedux';
 import React from 'react';
@@ -11,7 +12,9 @@ interface props {
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
 
-  const { isLoading } = usePrivate();
+  const { isLoading, data } = usePrivate();
+
+  useLoginSocket(data?.data.id, data?.data.role);
 
   if (isLoading) return null;
 

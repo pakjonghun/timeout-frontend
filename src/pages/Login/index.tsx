@@ -11,13 +11,14 @@ import { toast } from 'react-toastify';
 import usePublic from '@hooks/usePublic';
 import { useAppDispatch } from '@hooks/useRedux';
 import { setIsLogin } from '@redux/features/user';
+import socket from '../../socket.io';
 
 const Login = () => {
   const { state } = useLocation();
   const dispatch = useAppDispatch();
   const parsedState = state as { email: string | undefined; password: string | undefined };
   const navigate = useNavigate();
-  const { isLoading: isMyInfoChecking } = usePublic();
+  const { isLoading: isMyInfoChecking, data } = usePublic();
   const [loginMuataion, { isLoading, error, isSuccess }] = useLoginMutation();
 
   useEffect(() => {
@@ -27,6 +28,8 @@ const Login = () => {
   useEffect(() => {
     if (!isLoading && isSuccess) {
       toast.success('로그인 성공 했습니다.');
+      console.log(data);
+      socket.emit('login', { id: data?.data.id, role: data?.data.role });
       navigate('/');
     }
   }, [dispatch, isLoading, isSuccess, navigate]);

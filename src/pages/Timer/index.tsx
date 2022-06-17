@@ -4,11 +4,27 @@ import useTimer from './useTimer';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setIsWorking } from '@redux/features/timer';
 import socket from '../../socket.io';
+import { toast } from 'react-toastify';
 
 const Timer = () => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
   const dispatch = useAppDispatch();
   const time = useTimer(isWorking);
+
+  useEffect(() => {
+    socket.on('login', (msg) => {
+      toast(msg);
+    });
+
+    socket.on('error', (msg) => {
+      toast.error(msg);
+    });
+
+    return () => {
+      socket.off('login');
+      socket.off('error');
+    };
+  }, []);
 
   return (
     <MainLayout title="Timer">

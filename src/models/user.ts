@@ -29,9 +29,10 @@ export interface userResponse {
 }
 
 export interface me {
-  id: number;
-  startTime: string;
-  endTime: string;
-  userId: number;
-  userRole: 'Manager' | 'Client';
+  data: {
+    id: number;
+    role: 'Manager' | 'Client';
+    record: any[] | null;
+  };
+  message: string;
 }
