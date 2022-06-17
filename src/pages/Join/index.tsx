@@ -20,7 +20,7 @@ const Join = () => {
 
   const navigate = useNavigate();
 
-  const { isLoading: isMeLoading } = usePublic();
+  const { isLoading: isMyInfoChecking } = usePublic();
 
   const [joinMutation, { isSuccess, isLoading, error }] = useJoinMutation();
 
@@ -42,7 +42,7 @@ const Join = () => {
     }
   }, [isSuccess, navigate, watch]);
 
-  if (isMeLoading) return null;
+  if (isMyInfoChecking) return null;
 
   return (
     <AuthLayout

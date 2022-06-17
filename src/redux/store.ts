@@ -1,15 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { addListener, combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './features/user';
 import timer from './features/timer';
 import api from './services/index';
-
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
-const persistConfig = {
-  key: 'root',
-  storage,
-};
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -17,17 +10,12 @@ const rootReducer = combineReducers({
   user,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
-      },
-    }).concat(api.middleware),
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -1,23 +1,31 @@
 import React, { useCallback, useEffect } from 'react';
 import { userMenuList, adminMenuList, subMenuList, logout } from '@models/menus';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Menu from './Menu';
 import { useAppDispatch } from '@hooks/useRedux';
-import { logoutFetch } from '@redux/features/user';
+import { logoutFetch, setIsLogin } from '@redux/features/user';
 import { toast } from 'react-toastify';
 import usePrivate from '@hooks/usePrivate';
+import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 
 const Navigate = () => {
   const isAdmin = true;
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { isLoading: isMeLoading } = usePrivate();
+  const [logoutMutation, { isLoading, data, isSuccess, error, isError }] = useLogoutMutation();
+  useGetMyInfoQuery();
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      toast.success('안녕히 가세요.');
+      navigate('/login');
+    }
+  }, [isLoading, isSuccess, navigate, dispatch, isError, error, data]);
 
   const onLogoutClick = useCallback(() => {
-    dispatch(logoutFetch());
-  }, [dispatch]);
-
-  if (isMeLoading) return null;
+    logoutMutation();
+  }, [logoutMutation]);
 
   return (
     <div className="flex justify-between py-2 px-4 sm:px-10 border-b-2">

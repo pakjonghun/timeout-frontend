@@ -17,7 +17,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const parsedState = state as { email: string | undefined; password: string | undefined };
   const navigate = useNavigate();
-  const { isLoading: isMeLoading } = usePublic();
+  const { isLoading: isMyInfoChecking } = usePublic();
   const [loginMuataion, { isLoading, error, isSuccess }] = useLoginMutation();
 
   useEffect(() => {
@@ -25,12 +25,11 @@ const Login = () => {
   }, [error]);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (!isLoading && isSuccess) {
       toast.success('로그인 성공 했습니다.');
-      dispatch(setIsLogin(true));
       navigate('/');
     }
-  }, [dispatch, isSuccess, navigate]);
+  }, [dispatch, isLoading, isSuccess, navigate]);
 
   const {
     register,
@@ -55,7 +54,7 @@ const Login = () => {
     [loginMuataion],
   );
 
-  if (isMeLoading) return null;
+  if (isMyInfoChecking) return null;
 
   return (
     <AuthLayout

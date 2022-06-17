@@ -11,9 +11,9 @@ interface props {
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
 
-  // const { isLoading } = usePrivate();
+  const { isLoading } = usePrivate();
 
-  // if (isLoading) return null;
+  if (isLoading) return null;
 
   return (
     <section className="mx-auto max-w-screen-lg">

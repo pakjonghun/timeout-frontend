@@ -24,7 +24,7 @@ export interface joinResponse {
   data?: joinUser;
 }
 
-export interface loginResponse {
+export interface userResponse {
   message: string;
 }
 

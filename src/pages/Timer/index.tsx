@@ -4,7 +4,6 @@ import useTimer from './useTimer';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setIsWorking } from '@redux/features/timer';
 import socket from '../../socket.io';
-import usePrivate from '@hooks/usePrivate';
 
 const Timer = () => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
