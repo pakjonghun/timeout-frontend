@@ -5,6 +5,7 @@ import Menu from './Menu';
 import { useAppDispatch } from '@hooks/useRedux';
 import { toast } from 'react-toastify';
 import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
+import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
 
 const Navigate = () => {
   const { data: myInfo } = useGetMyInfoQuery();
@@ -13,6 +14,23 @@ const Navigate = () => {
 
   const [logoutMutation, { isLoading, data, isSuccess, error, isError }] = useLogoutMutation();
   useGetMyInfoQuery();
+
+  useEffect(() => {
+    if (myInfo?.data.recordList) {
+      dispatch(setIsWorking(true));
+
+      const temp = myInfo.data.recordList.startTime;
+      const startTime = new Date(temp);
+      const currentTime = new Date();
+
+      const difference = Math.abs(currentTime.getTime() - startTime.getTime());
+      const hour = Math.floor(difference / (1000 * 60 * 60));
+      const minute = (difference % ((hour || 1) * 1000 * 60 * 60)) / (1000 * 60);
+      console.log(hour, minute, startTime, temp, difference);
+      dispatch(setHour(hour));
+      dispatch(setMinute(Math.round(minute)));
+    }
+  }, [myInfo, dispatch]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {

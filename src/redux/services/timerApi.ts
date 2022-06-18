@@ -1,4 +1,4 @@
-import { startTimerRequest, startTimerResponse } from './../../models/timer';
+import { endTimerRequest, startTimerRequest, startTimerResponse, endTimerResponse } from './../../models/timer';
 import api from '.';
 
 const recordApi = api.injectEndpoints({
@@ -11,8 +11,19 @@ const recordApi = api.injectEndpoints({
           body,
         };
       },
+      invalidatesTags: ['MyInfo'],
+    }),
+    endTimer: build.mutation<endTimerResponse, endTimerRequest>({
+      query(body) {
+        return {
+          url: '/records/end',
+          method: 'PATCH',
+          body,
+        };
+      },
+      invalidatesTags: ['MyInfo'],
     }),
   }),
 });
 
-export const { useStartTimerMutation } = recordApi;
+export const { useEndTimerMutation, useStartTimerMutation } = recordApi;

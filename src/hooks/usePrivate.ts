@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useGetMyInfoQuery } from '@redux/services/userApi';
+import socket from '../socket.io';
 const usePrivate = () => {
   const navigate = useNavigate();
 
@@ -12,7 +13,11 @@ const usePrivate = () => {
       toast.warn('로그인이 필요합니다.');
       navigate('/login');
     }
-  }, [isSuccess, isFetching, navigate]);
+
+    if (!isFetching && isSuccess) {
+      socket.emit('reConnect', { id: data.data.id, role: data.data.role });
+    }
+  }, [isSuccess, isFetching, data, navigate]);
   return { isLoading, data };
 };
 

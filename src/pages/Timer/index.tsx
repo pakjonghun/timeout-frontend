@@ -2,17 +2,20 @@ import React, { useCallback, useEffect } from 'react';
 import MainLayout from '@components/MainLayout';
 import useTimer from './useTimer';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
-import { setIsWorking } from '@redux/features/timer';
+import { setInitTimer, setIsWorking } from '@redux/features/timer';
 import socket from '../../socket.io';
 import { toast } from 'react-toastify';
 import { joinStyle } from '@utils/styleUtils';
-import { useStartTimerMutation } from '@redux/services/timerApi';
+import { useEndTimerMutation, useStartTimerMutation } from '@redux/services/timerApi';
+import Spinner from '@components/Spinner';
 
 const Timer = () => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
   const dispatch = useAppDispatch();
   const time = useTimer(isWorking);
-  const [startTimerMutation, { isLoading, error, data }] = useStartTimerMutation();
+  const [startTimerMutation, { isLoading: isStartTimerLoading, error: startTimerError }] = useStartTimerMutation();
+  const [endTimerMutation, { isLoading: isEndTimerLoading, error: endTimerError }] = useEndTimerMutation();
+  const isLoading = isStartTimerLoading || isEndTimerLoading;
 
   const onStartClick = useCallback(() => {
     dispatch(setIsWorking(true));
@@ -21,14 +24,19 @@ const Timer = () => {
   }, [dispatch, startTimerMutation]);
 
   const onStopClick = useCallback(() => {
-    dispatch(setIsWorking(false));
-  }, [dispatch]);
+    endTimerMutation({ endTime: new Date() });
+    dispatch(setInitTimer());
+  }, [dispatch, endTimerMutation]);
+
+  useEffect(() => {
+    if (startTimerError) toast.error('초과근무를 시작 할 수 없습니다.');
+    if (endTimerError) toast.error('초과근무를 시작 할 수 없습니다.');
+  }, [endTimerError, startTimerError]);
 
   useEffect(() => {
     socket.on('login', (msg) => {
       toast(msg);
     });
-
     return () => {
       socket.off('login');
     };
@@ -37,7 +45,10 @@ const Timer = () => {
   return (
     <MainLayout title="Timer">
       <div className="flex flex-col items-center justify-center h-40 w-40 mt-5 pt-3 mx-auto bg-orange-300 rounded-full bg-gradient-to-tl from-orange-700 to-orange-300">
-        {isWorking && <span className="text-black font-bold text-2xl">{time}</span>}
+        {!isLoading && isWorking && (
+          <span className="animate-[down_1.5s_linear] text-black font-bold text-2xl">{time}</span>
+        )}
+        {(isLoading || isEndTimerLoading) && <Spinner classes="mt-16 animate-spin h-5 w-5 fill-orange-500" />}
         <div className="flex p-3 fill-gray-500"></div>
       </div>
       <div className="w-fit mx-auto space-x-2 mt-3">

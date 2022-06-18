@@ -1,3 +1,5 @@
+import { record } from './record';
+
 export interface joinForm {
   name: string;
   email: string;
@@ -32,7 +34,7 @@ export interface me {
   data: {
     id: number;
     role: 'Manager' | 'Client';
-    record: any[] | null;
+    recordList: record;
   };
   message: string;
 }

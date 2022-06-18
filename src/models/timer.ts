@@ -14,3 +14,14 @@ export interface startTimerResponse {
   data: startTimeData;
   message: string;
 }
+
+export interface endTimerRequest {
+  endTime: Date;
+}
+
+export interface endTimeData extends startTimeData {}
+
+export interface endTimerResponse {
+  data: endTimeData;
+  message: string;
+}
