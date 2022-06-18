@@ -13,7 +13,7 @@ const Sticker: React.FC<props> = ({ classes, title, index }) => {
   return (
     <div
       className={joinStyle(
-        'rounded-full first-letter:uppercase font-bold',
+        'rounded-full first-letter:uppercase font-medium',
         stickerCategory[title].bgColor,
         stickerCategory[title].textColor,
         classes ? classes : '',

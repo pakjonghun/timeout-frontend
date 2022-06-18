@@ -11,7 +11,7 @@ const recordApi = api.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ['MyInfo'],
+      invalidatesTags: ['MyInfo', 'Record'],
     }),
     endTimer: build.mutation<endTimerResponse, endTimerRequest>({
       query(body) {
@@ -21,7 +21,7 @@ const recordApi = api.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ['MyInfo'],
+      invalidatesTags: ['MyInfo', 'Record'],
     }),
   }),
 });

@@ -1,6 +1,7 @@
-import { addListener, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './features/user';
 import timer from './features/timer';
+import record from './features/record';
 import api from './services/index';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
@@ -8,6 +9,7 @@ const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   timer,
   user,
+  record,
 });
 
 const store = configureStore({

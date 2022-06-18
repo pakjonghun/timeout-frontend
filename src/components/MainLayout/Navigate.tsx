@@ -26,7 +26,6 @@ const Navigate = () => {
       const difference = Math.abs(currentTime.getTime() - startTime.getTime());
       const hour = Math.floor(difference / (1000 * 60 * 60));
       const minute = (difference % ((hour || 1) * 1000 * 60 * 60)) / (1000 * 60);
-      console.log(hour, minute, startTime, temp, difference);
       dispatch(setHour(hour));
       dispatch(setMinute(Math.round(minute)));
     }
@@ -44,8 +43,8 @@ const Navigate = () => {
   }, [logoutMutation]);
 
   return (
-    <div className="flex justify-between py-2 px-4 sm:px-10 border-b-2">
-      <ul className="flex items-center space-x-5 sm:space-x-10">
+    <div className="flex justify-between py-2 px-4 sm:px-5 border-b-2">
+      <ul className="flex items-center space-x-5 sm:space-x-7">
         <li>
           <Link to="/">
             <img
@@ -59,7 +58,7 @@ const Navigate = () => {
           return <Menu key={id} {...props} />;
         })}
       </ul>
-      <ul className="flex items-center space-x-10">
+      <ul className="flex items-center space-x-5 sm:space-x-7">
         {subMenuList.map(({ id, ...props }) => (
           <Menu key={id} {...props} />
         ))}

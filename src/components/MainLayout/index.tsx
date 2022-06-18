@@ -41,10 +41,10 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
   if (isLoading) return null;
 
   return (
-    <section className="mx-auto max-w-screen-lg">
+    <section className="min-w-[600px] mx-auto max-w-screen-lg">
       <header className="relative">
         <Navigate />
-        <div className="absolute right-5 -bottom-10 md:-bottom-28">
+        <div className="absolute right-5 -bottom-10 lg:-bottom-11">
           <WorkingImage isWorking={isWorking} />
         </div>
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>

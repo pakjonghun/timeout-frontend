@@ -16,7 +16,7 @@ const WorkingImage: React.FC<props> = ({ isWorking }) => {
             setIsBounce((pre) => !pre);
           }}
           className={joinStyle(
-            'w-32 md:w-52 cursor-pointer',
+            'w-32 md:w-36 lg:w-40 cursor-pointer',
             isBounce ? 'animate-[wiggle_1.5s_ease-in-out_infinite]' : '',
           )}
           src="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/de2a2e47-4d52-479e-7e58-e2a1ee267900/medium"
