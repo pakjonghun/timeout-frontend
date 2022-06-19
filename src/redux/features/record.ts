@@ -9,44 +9,46 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 type InitialState = {
   userRecordTableHeadByRecent: {
     thead: typeof userRecordTableHeadByRecent;
+    sort: { sortKey: UserRecordTableHeadByRecentKeys | null; sortValue: 'ASC' | 'DESC' | null };
     page: number;
     perPage: number;
-    selectedItemList: number[];
   };
 
   adminRecordTableHeadByUser: {
     thead: typeof adminRecordTableHeadByUser;
+    sort: { sortKey: AdminRecordTableHeadByUserKeys | null; sortValue: 'ASC' | 'DESC' | null };
+    selectedItemList: number[];
     page: number;
     perPage: number;
-    selectedItemList: number[];
   };
 
   recordTableHeadByDate: {
     thead: typeof recordTableHeadByDate;
+    sort: { sortKey: RecordTableHeadByDateKeys | null; sortValue: 'ASC' | 'DESC' | null };
     page: number;
     perPage: number;
-    selectedItemList: number[];
   };
 };
 
 const initialState: InitialState = {
   userRecordTableHeadByRecent: {
     thead: userRecordTableHeadByRecent,
+    sort: { sortKey: null, sortValue: null },
     page: 1,
-    perPage: 10,
-    selectedItemList: [],
+    perPage: 15,
   },
   adminRecordTableHeadByUser: {
     thead: adminRecordTableHeadByUser,
-    page: 1,
-    perPage: 10,
+    sort: { sortKey: null, sortValue: null },
     selectedItemList: [],
+    page: 1,
+    perPage: 15,
   },
   recordTableHeadByDate: {
     thead: recordTableHeadByDate,
+    sort: { sortKey: null, sortValue: null },
     page: 1,
-    perPage: 10,
-    selectedItemList: [],
+    perPage: 15,
   },
 };
 
@@ -54,92 +56,40 @@ const recordSlice = createSlice({
   name: 'recordSlice',
   initialState,
   reducers: {
-    addUserRecordTableHeadByRecentSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      if (!state.userRecordTableHeadByRecent.selectedItemList.some((id) => id === payload)) {
-        state.userRecordTableHeadByRecent.selectedItemList.push(payload);
-      }
-    },
-
     addAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
       if (!state.adminRecordTableHeadByUser.selectedItemList.some((id) => id === payload)) {
         state.adminRecordTableHeadByUser.selectedItemList.push(payload);
       }
     },
 
-    addrecordTableHeadByDateSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      if (!state.recordTableHeadByDate.selectedItemList.some((id) => id === payload)) {
-        state.recordTableHeadByDate.selectedItemList.push(payload);
-      }
-    },
-
-    deleteUserRecordTableHeadByRecentSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      state.userRecordTableHeadByRecent.selectedItemList = state.userRecordTableHeadByRecent.selectedItemList.filter(
-        (id) => id !== payload,
-      );
-    },
-
     deleteAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      state.adminRecordTableHeadByUser.selectedItemList = state.userRecordTableHeadByRecent.selectedItemList.filter(
-        (id) => id !== payload,
-      );
-    },
-
-    deleteRecordTableHeadByDateSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      state.recordTableHeadByDate.selectedItemList = state.userRecordTableHeadByRecent.selectedItemList.filter(
+      state.adminRecordTableHeadByUser.selectedItemList = state.adminRecordTableHeadByUser.selectedItemList.filter(
         (id) => id !== payload,
       );
     },
 
     setSortUserRecordTableHeadByRecent: (state, { payload }: PayloadAction<UserRecordTableHeadByRecentKeys>) => {
-      const thead = [...state.userRecordTableHeadByRecent.thead];
-      thead.forEach((v) => {
-        if (v.key == payload) {
-          const nextSortKey = v.sortKey == 'ASC' ? 'DESC' : 'ASC';
-          v.sortKey = nextSortKey;
-        } else {
-          v.sortKey = null;
-        }
-      });
-
-      state.userRecordTableHeadByRecent.thead = thead;
+      const { sortValue } = state.userRecordTableHeadByRecent.sort;
+      const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.userRecordTableHeadByRecent.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
     setSortAdminRecordTableHeadByUser: (state, { payload }: PayloadAction<AdminRecordTableHeadByUserKeys>) => {
-      const thead = [...state.adminRecordTableHeadByUser.thead];
-      thead.forEach((v) => {
-        if (v.key == payload) {
-          const nextSortKey = v.sortKey == 'ASC' ? 'DESC' : 'ASC';
-          v.sortKey = nextSortKey;
-        } else {
-          v.sortKey = null;
-        }
-      });
-
-      state.adminRecordTableHeadByUser.thead = thead;
+      const { sortValue } = state.adminRecordTableHeadByUser.sort;
+      const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.adminRecordTableHeadByUser.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
     setSortRecordTableHeadByDate: (state, { payload }: PayloadAction<RecordTableHeadByDateKeys>) => {
-      const thead = [...state.recordTableHeadByDate.thead];
-      thead.forEach((v) => {
-        if (v.key == payload) {
-          const nextSortKey = v.sortKey == 'ASC' ? 'DESC' : 'ASC';
-          v.sortKey = nextSortKey;
-        } else {
-          v.sortKey = null;
-        }
-      });
-
-      state.recordTableHeadByDate.thead = thead;
+      const { sortValue } = state.recordTableHeadByDate.sort;
+      const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.recordTableHeadByDate.sort = { sortKey: payload, sortValue: nextSortValue };
     },
   },
 });
 export const {
-  addUserRecordTableHeadByRecentSelectedItem,
   addAdminRecordTableHeadByUserSelectedItem,
-  addrecordTableHeadByDateSelectedItem,
-  deleteUserRecordTableHeadByRecentSelectedItem,
   deleteAdminRecordTableHeadByUserSelectedItem,
-  deleteRecordTableHeadByDateSelectedItem,
   setSortUserRecordTableHeadByRecent,
   setSortAdminRecordTableHeadByUser,
   setSortRecordTableHeadByDate,

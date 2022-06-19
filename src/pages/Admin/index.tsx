@@ -3,7 +3,7 @@ import MainLayout from '@components/MainLayout';
 import WorkerCard from './WorkerCard';
 import { adminRecordTableHeadByUser } from '@models/tables';
 import NoticeForm from './NoticeForm';
-import AdminTable from '@components/AdminTable';
+import AdminTable from '@pages/Record/AdminRecord/AdminTable';
 
 const Admin = () => {
   return (
@@ -26,7 +26,7 @@ const Admin = () => {
         <main>
           <div className="flex flex-col w-fit mx-auto space-y-5">
             <NoticeForm />
-            <AdminTable thead={adminRecordTableHeadByUser} tbody={Array(7).fill(0)} />
+            {/* <AdminTable thead={adminRecordTableHeadByUser} tbody={Array(7).fill(0)} /> */}
           </div>
         </main>
       </section>

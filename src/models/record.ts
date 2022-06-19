@@ -2,6 +2,8 @@ export interface record {
   id: number;
   startTime: Date;
   endTime: Date | null;
+  duration: number;
+  status: 'working' | 'done' | 'nothing';
   description: string | null;
 }
 
@@ -15,10 +17,14 @@ export type recordWithUser = {
   startTime: Date;
   endTime: Date | null;
   description: string | null;
+  duration: number;
+  status: 'working' | 'done' | 'nothing';
   user: user;
 };
 
 export interface getRecordsQuery {
+  sortKey: string | null;
+  sortValue: 'ASC' | 'DESC' | null;
   page: number;
   perPage: number;
 }

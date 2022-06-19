@@ -17,8 +17,8 @@ const Menu: React.FC<props> = ({ link, title, icon, onClick }) => {
       <Link
         {...(onClick && { onClick })}
         className={joinStyle(
-          'focus:fill-gray-600 group fill-gray-400 flex flex-col items-center space-y-1 hover:fill-gray-800',
-          pathname === link || (pathname === '/avatar' && link === '/profile') ? 'fill-gray-800' : '',
+          'focus:fill-gray-600 group flex flex-col items-center space-y-1 hover:fill-gray-800',
+          pathname === link || (pathname === '/avatar' && link === '/profile') ? 'fill-gray-800' : 'fill-gray-400',
         )}
         to={link}
       >
@@ -26,7 +26,7 @@ const Menu: React.FC<props> = ({ link, title, icon, onClick }) => {
         {title && (
           <span
             className={joinStyle(
-              'group-focus:text-gray-600 group-hover:text-gray-800 first-letter:uppercase font-medium text-xs ',
+              'group-focus:text-gray-600 group-hover:text-gray-800 first-letter:uppercase font-extrabold text-xs ',
               pathname === link || (pathname === '/avatar' && link === '/profile') ? ' text-gray-800' : 'text-gray-400',
             )}
           >

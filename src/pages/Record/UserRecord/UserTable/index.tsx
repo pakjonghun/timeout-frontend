@@ -11,7 +11,7 @@ interface props {
 
 const UserTable: React.FC<props> = ({ thead, tbody }) => {
   return (
-    <table className="text-xs lg:text-sm mx-auto mt-10 table-auto border shadow-md rounded-sm">
+    <table className="text-[12px] sm:text-xs lg:text-sm mx-auto mt-10 table-auto border shadow-md rounded-sm">
       <Thead thead={thead} />
       <Tbody tbody={tbody} />
     </table>
