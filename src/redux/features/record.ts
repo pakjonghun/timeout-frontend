@@ -22,6 +22,7 @@ type InitialState = {
     cursor: number;
     page: number;
     perPage: number;
+    isAllSelected: boolean;
   };
 
   recordTableHeadByDate: {
@@ -48,6 +49,7 @@ const initialState: InitialState = {
     cursor: 1,
     page: 1,
     perPage: 13,
+    isAllSelected: false,
   },
   recordTableHeadByDate: {
     thead: recordTableHeadByDate,
@@ -62,16 +64,47 @@ const recordSlice = createSlice({
   name: 'recordSlice',
   initialState,
   reducers: {
-    addAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
+    toggleAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
       if (!state.adminRecordTableHeadByUser.selectedItemList.some((id) => id === payload)) {
         state.adminRecordTableHeadByUser.selectedItemList.push(payload);
+      } else {
+        state.adminRecordTableHeadByUser.selectedItemList = state.adminRecordTableHeadByUser.selectedItemList.filter(
+          (id) => id !== payload,
+        );
       }
     },
 
-    deleteAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
-      state.adminRecordTableHeadByUser.selectedItemList = state.adminRecordTableHeadByUser.selectedItemList.filter(
-        (id) => id !== payload,
-      );
+    setAdminRecordTableHeadByUserIsAllSelected: (state, { payload }: PayloadAction<{ idList: number[] }>) => {
+      const selectedList = state.adminRecordTableHeadByUser.selectedItemList;
+
+      let isAllSelected = true;
+      for (const id of payload.idList) {
+        const index = selectedList.indexOf(id);
+        if (index < 0) {
+          isAllSelected = false;
+          break;
+        }
+      }
+
+      state.adminRecordTableHeadByUser.isAllSelected = isAllSelected;
+    },
+
+    toggleAdminRecordTableHeadByUserSelectedItemList: (
+      state,
+      { payload }: PayloadAction<{ idList: number[]; checked: boolean }>,
+    ) => {
+      const selectedList = state.adminRecordTableHeadByUser.selectedItemList;
+
+      for (const id of payload.idList) {
+        const index = selectedList.indexOf(id);
+        if (payload.checked) {
+          if (index < 0) selectedList.push(id);
+        } else {
+          if (index >= 0) selectedList.splice(index, 1);
+        }
+      }
+
+      state.adminRecordTableHeadByUser.selectedItemList = selectedList;
     },
 
     setPageUserRecordTableHeadByRecent: (state, { payload }: PayloadAction<number>) => {
@@ -121,14 +154,15 @@ export const {
   setPageUserRecordTableHeadByRecent,
   setPageAdminRecordTableHeadByUser,
   setPageRecordTableHeadByDate,
-  addAdminRecordTableHeadByUserSelectedItem,
-  deleteAdminRecordTableHeadByUserSelectedItem,
+  toggleAdminRecordTableHeadByUserSelectedItem,
+  toggleAdminRecordTableHeadByUserSelectedItemList,
   setSortUserRecordTableHeadByRecent,
   setSortAdminRecordTableHeadByUser,
   setSortRecordTableHeadByDate,
   setCursorUserRecordTableHeadByRecent,
   setCursorAdminRecordTableHeadByUser,
   setCursorRecordTableHeadByDate,
+  setAdminRecordTableHeadByUserIsAllSelected,
 } = recordSlice.actions;
 
 export default recordSlice.reducer;

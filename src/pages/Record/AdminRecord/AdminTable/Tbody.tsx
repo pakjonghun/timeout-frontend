@@ -1,12 +1,18 @@
 import Sticker from '@components/Sticker';
+import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { recordWithUser } from '@models/record';
-import React from 'react';
+import { toggleAdminRecordTableHeadByUserSelectedItem } from '@redux/features/record';
+import { joinStyle } from '@utils/styleUtils';
+import React, { useEffect } from 'react';
 
 interface props {
   tbody: recordWithUser[];
 }
 
 const Tbody: React.FC<props> = ({ tbody }) => {
+  const dispatch = useAppDispatch();
+  const selectedList = useAppSelector((state) => state.record.adminRecordTableHeadByUser.selectedItemList);
+
   if (tbody == null || !tbody?.length) return null;
 
   return (
@@ -18,16 +24,25 @@ const Tbody: React.FC<props> = ({ tbody }) => {
         const durationGetTime = getTime(duration);
 
         return (
-          <tr key={id} className="whitespace-nowrap hover:bg-orange-50">
+          <tr
+            key={id}
+            onClick={(event) => {
+              dispatch(toggleAdminRecordTableHeadByUserSelectedItem(id));
+            }}
+            className={joinStyle(
+              'cursor-pointer whitespace-nowrap active:bg-orange-50',
+              selectedList.includes(id) ? 'bg-orange-50' : '',
+            )}
+          >
             <td className="text-center py-3 pl-3">
               <input
-                className="w-3 h-3 mr-1 mb-[3px] focus:outline-none focus:ring-0 focus:ring-gray-100 focus:text-pink-500 rounded-sm"
+                checked={selectedList.includes(id)}
+                onChange={() => {}}
+                className="w-3 h-3 mr-1 mb-[3px] focus:outline-none focus:ring-0 focus:ring-gray-100 rounded-sm"
                 type="checkBox"
                 id={id + ''}
               />
-              <label className="hidden lg:inline" htmlFor={id + ''}>
-                개별선택
-              </label>
+              <span className="hidden lg:inline">개별선택</span>
             </td>
             <td className="text-center py-3">{user?.name}</td>
             <td className="text-center py-3">{startDate.toLocaleDateString()}</td>

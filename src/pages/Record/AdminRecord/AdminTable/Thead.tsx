@@ -1,15 +1,21 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { AdminRecordTableHeadByUserKeys, TableHead } from '@models/tables';
-import { setSortAdminRecordTableHeadByUser } from '@redux/features/record';
+import {
+  setAdminRecordTableHeadByUserIsAllSelected,
+  setSortAdminRecordTableHeadByUser,
+  toggleAdminRecordTableHeadByUserSelectedItemList,
+} from '@redux/features/record';
 import { joinStyle } from '@utils/styleUtils';
 
 interface props {
   thead: TableHead[];
+  idList: number[];
 }
 
-const Thead: React.FC<props> = ({ thead }) => {
+const Thead: React.FC<props> = ({ idList, thead }) => {
   const { sortKey, sortValue } = useAppSelector((state) => state.record.adminRecordTableHeadByUser.sort);
+  const isAllSelected = useAppSelector((state) => state.record.adminRecordTableHeadByUser.isAllSelected);
 
   const dispatch = useAppDispatch();
   const onSortButtonClick = useCallback(
@@ -20,6 +26,11 @@ const Thead: React.FC<props> = ({ thead }) => {
     [dispatch],
   );
 
+  useEffect(() => {
+    dispatch(setAdminRecordTableHeadByUserIsAllSelected({ idList }));
+  }, [idList, dispatch]);
+
+  // setAdminRecordTableHeadByUserIsAllSelected
   return (
     <thead className="text-gray-500 font-medium bg-gray-100">
       <tr className="whitespace-nowrap border-b-1">
@@ -28,7 +39,16 @@ const Thead: React.FC<props> = ({ thead }) => {
             return (
               <th key={id} className="text-center py-3 pl-2 md:pl-3 lg:px-7 xl:px-10">
                 <input
-                  className="w-3 h-3 mr-1 mb-[3px] focus:outline-none focus:ring-0 focus:ring-gray-100 focus:text-pink-500 rounded-sm"
+                  checked={isAllSelected}
+                  onChange={(event) =>
+                    dispatch(
+                      toggleAdminRecordTableHeadByUserSelectedItemList({
+                        idList,
+                        checked: event.currentTarget.checked,
+                      }),
+                    )
+                  }
+                  className="w-3 h-3 mr-1 mb-[3px] focus:outline-none focus:ring-0 focus:ring-gray-100  rounded-sm"
                   type="checkBox"
                   id={id + ''}
                 />

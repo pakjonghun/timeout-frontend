@@ -1,5 +1,6 @@
 import React from 'react';
 import { joinStyle } from '@utils/styleUtils';
+import { perCursor } from '@models/tables';
 
 interface props {
   totalPage: number;
@@ -22,14 +23,13 @@ const Page: React.FC<props> = ({
   onFirstClick,
   onPageClick,
 }) => {
-  const perCursor = 3;
   const tempArray = Array.from(Array(totalPage), (_, i) => i + 1).slice(
     (curCursor - 1) * perCursor,
     (curCursor - 1) * perCursor + perCursor,
   );
 
   return (
-    <ul className="flex items-center space-x-3 w-fit mx-auto mt-5 font-medium text-sm text-gray-400 fill-gray-400 cursor-pointer">
+    <ul className="flex items-center space-x-3 w-fit mx-auto my-5 font-medium text-sm text-gray-400 fill-gray-400 cursor-pointer">
       <li onClick={onFirstClick} className="active:text-gray-500 hover:text-gray-800">
         처음
       </li>

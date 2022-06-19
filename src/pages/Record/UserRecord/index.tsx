@@ -7,6 +7,7 @@ import UserTable from './UserTable';
 import { record } from '@models/record';
 import Page from '@components/Page';
 import { setCursorUserRecordTableHeadByRecent, setPageUserRecordTableHeadByRecent } from '@redux/features/record';
+import { perCursor } from '@models/tables';
 
 const Record = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,6 @@ const Record = () => {
   const { data, isLoading } = useGetRecordsQuery({ page, perPage, sortKey, sortValue });
   const userThead = useAppSelector((state) => [...state.record.userRecordTableHeadByRecent.thead]);
   const userData = data?.data as unknown as record[];
-  const perCursor = 3;
 
   const onPageClick = useCallback(
     (curPage: number) => {
@@ -54,7 +54,7 @@ const Record = () => {
     const totalCursor = Math.ceil(data!.totalPage / perCursor);
     dispatch(setCursorUserRecordTableHeadByRecent(totalCursor));
     dispatch(setPageUserRecordTableHeadByRecent(data!.totalPage));
-  }, [data, perCursor, dispatch]);
+  }, [data, dispatch]);
 
   if (isLoading) return <Spinner classes="h-5 w-5" />;
 

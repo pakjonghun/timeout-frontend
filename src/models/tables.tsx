@@ -1,3 +1,5 @@
+export const perCursor = 3;
+
 export type TableHead = {
   title: string;
   id: number;
