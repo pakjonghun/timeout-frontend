@@ -27,6 +27,10 @@ export interface joinResponse {
 }
 
 export interface userResponse {
+  data: {
+    id: number;
+    role: 'Manager' | 'Client';
+  };
   message: string;
 }
 

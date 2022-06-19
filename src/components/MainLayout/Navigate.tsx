@@ -6,6 +6,7 @@ import { useAppDispatch } from '@hooks/useRedux';
 import { toast } from 'react-toastify';
 import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
+import socket from '../../socket.io';
 
 const Navigate = () => {
   const { data: myInfo } = useGetMyInfoQuery();
@@ -40,6 +41,7 @@ const Navigate = () => {
 
   const onLogoutClick = useCallback(() => {
     logoutMutation();
+    socket.emit('logout');
   }, [logoutMutation]);
 
   return (

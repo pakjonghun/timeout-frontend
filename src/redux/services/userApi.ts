@@ -34,7 +34,7 @@ const userApi = api.injectEndpoints({
           method: 'POST',
         };
       },
-      invalidatesTags: ['MyInfo'],
+      invalidatesTags: ['MyInfo', 'Record'],
     }),
   }),
 });

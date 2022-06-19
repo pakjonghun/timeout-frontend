@@ -17,8 +17,8 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const parsedState = state as { email: string | undefined; password: string | undefined };
   const navigate = useNavigate();
-  const { isLoading: isMyInfoChecking, data } = usePublic();
-  const [loginMuataion, { isLoading, error, isSuccess }] = useLoginMutation();
+  const { isLoading: isMyInfoChecking } = usePublic();
+  const [loginMuataion, { isLoading, error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
     if (error) toast.error((error as { error: string }).error);
@@ -26,6 +26,7 @@ const Login = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
+      console.log(data?.data);
       toast.success('로그인 성공 했습니다.');
       socket.emit('login', { id: data?.data.id, role: data?.data.role });
       navigate('/');
