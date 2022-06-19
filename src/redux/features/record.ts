@@ -122,18 +122,21 @@ const recordSlice = createSlice({
     setSortUserRecordTableHeadByRecent: (state, { payload }: PayloadAction<UserRecordTableHeadByRecentKeys>) => {
       const { sortValue } = state.userRecordTableHeadByRecent.sort;
       const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.userRecordTableHeadByRecent = { ...initialState.userRecordTableHeadByRecent };
       state.userRecordTableHeadByRecent.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
     setSortAdminRecordTableHeadByUser: (state, { payload }: PayloadAction<AdminRecordTableHeadByUserKeys>) => {
       const { sortValue } = state.adminRecordTableHeadByUser.sort;
       const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.adminRecordTableHeadByUser = { ...initialState.adminRecordTableHeadByUser };
       state.adminRecordTableHeadByUser.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
     setSortRecordTableHeadByDate: (state, { payload }: PayloadAction<RecordTableHeadByDateKeys>) => {
       const { sortValue } = state.recordTableHeadByDate.sort;
       const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
+      state.recordTableHeadByDate = { ...initialState.recordTableHeadByDate };
       state.recordTableHeadByDate.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
