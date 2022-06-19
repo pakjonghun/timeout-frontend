@@ -24,7 +24,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
     });
 
     socket.on('workingUsers', (workingUsers) => {
-      console.log(workingUsers);
+      // console.log(workingUsers);
     });
 
     socket.on('notice', (msg) => {
@@ -41,7 +41,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
   if (isLoading) return null;
 
   return (
-    <section className="min-w-[600px] mx-auto max-w-screen-lg">
+    <section className="min-w-[650px] mx-auto max-w-screen-lg">
       <header className="relative">
         <Navigate />
         <div className="absolute right-5 -bottom-10 lg:-bottom-11">

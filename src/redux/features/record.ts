@@ -23,6 +23,7 @@ type InitialState = {
     page: number;
     perPage: number;
     isAllSelected: boolean;
+    openedItemId: number | null;
   };
 
   recordTableHeadByDate: {
@@ -50,6 +51,7 @@ const initialState: InitialState = {
     page: 1,
     perPage: 13,
     isAllSelected: false,
+    openedItemId: null,
   },
   recordTableHeadByDate: {
     thead: recordTableHeadByDate,
@@ -64,6 +66,14 @@ const recordSlice = createSlice({
   name: 'recordSlice',
   initialState,
   reducers: {
+    toggleAdminOpenedItem: (state, { payload }: PayloadAction<number>) => {
+      if (state.adminRecordTableHeadByUser.openedItemId === payload) {
+        state.adminRecordTableHeadByUser.openedItemId = null;
+      } else {
+        state.adminRecordTableHeadByUser.openedItemId = payload;
+      }
+    },
+
     toggleAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
       if (!state.adminRecordTableHeadByUser.selectedItemList.some((id) => id === payload)) {
         state.adminRecordTableHeadByUser.selectedItemList.push(payload);
@@ -75,6 +85,11 @@ const recordSlice = createSlice({
     },
 
     setAdminRecordTableHeadByUserIsAllSelected: (state, { payload }: PayloadAction<{ idList: number[] }>) => {
+      if (!payload.idList.length) {
+        state.adminRecordTableHeadByUser.isAllSelected = false;
+        return;
+      }
+
       const selectedList = state.adminRecordTableHeadByUser.selectedItemList;
 
       let isAllSelected = true;
@@ -154,6 +169,7 @@ const recordSlice = createSlice({
   },
 });
 export const {
+  toggleAdminOpenedItem,
   setPageUserRecordTableHeadByRecent,
   setPageAdminRecordTableHeadByUser,
   setPageRecordTableHeadByDate,

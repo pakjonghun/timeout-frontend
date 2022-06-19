@@ -23,7 +23,8 @@ export type AdminRecordTableHeadByUserKeys =
   | 'endTime'
   | 'duration'
   | 'status'
-  | 'date';
+  | 'date'
+  | 'admin';
 
 export const adminRecordTableHeadByUser: TableKeys<AdminRecordTableHeadByUserKeys>[] = [
   { id: 11, key: 'select', title: '#' },
@@ -33,6 +34,7 @@ export const adminRecordTableHeadByUser: TableKeys<AdminRecordTableHeadByUserKey
   { id: 14, key: 'endTime', title: '종료시간' },
   { id: 15, key: 'duration', title: '근무시간' },
   { id: 16, key: 'status', title: '상태' },
+  { id: 32, key: 'admin', title: '관리' },
 ];
 
 export type RecordTableHeadByDateKeys = 'date' | 'count' | 'averageDuration' | 'totalDuration';

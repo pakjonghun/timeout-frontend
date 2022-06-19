@@ -39,6 +39,6 @@ function getMinute(minute: number) {
 
 function getHourAndMinute(hour: number, minute: number) {
   const newMinute = minute < 10 ? `0${minute}` : minute;
-  const newHour = `0${hour}`;
+  const newHour = hour < 10 ? `0${hour}` : hour;
   return `${newHour} : ${newMinute}`;
 }

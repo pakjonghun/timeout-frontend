@@ -36,3 +36,26 @@ export interface getRecordsResponse {
   totalPage: number;
   user?: user;
 }
+
+export interface adminEditRecordRequest {
+  startTime?: Date;
+  endTime?: Date;
+  description?: string;
+  id: number;
+}
+
+export interface adminEditRecordResponse {
+  message: string;
+}
+
+export interface adminDeleteRecordRequest {
+  id: number;
+}
+
+export interface adminDeleteRecordsRequest {
+  ids: number[];
+}
+
+export interface adminDeleteRecordResponse {
+  message: string;
+}

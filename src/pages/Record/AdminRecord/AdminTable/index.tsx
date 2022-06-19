@@ -11,11 +11,11 @@ interface props {
 }
 
 const AdminTable: React.FC<props> = ({ page, thead, tbody }) => {
-  const idList = tbody.map(({ id }) => id);
+  const idList = tbody && tbody.length ? tbody.map(({ id }) => id) : [];
 
   return (
     <>
-      <table className="text-[11px] md:text-xs mx-auto mt-10 table-auto border shadow-md rounded-sm">
+      <table className="text-[11px] md:text-xs table-auto border shadow-md rounded-sm">
         <Thead thead={thead} idList={idList} />
         <Tbody tbody={tbody} />
       </table>

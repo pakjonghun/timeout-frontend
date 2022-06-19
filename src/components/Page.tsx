@@ -42,7 +42,10 @@ const Page: React.FC<props> = ({
       {tempArray.map((v) => (
         <li
           onClick={() => onPageClick(v)}
-          className={joinStyle('active:text-gray-500 hover:text-gray-800', curPage == v ? 'text-gray-800' : '')}
+          className={joinStyle(
+            'min-w-[1rem] text-center active:text-gray-500 hover:text-gray-800',
+            curPage == v ? 'text-gray-800' : '',
+          )}
           key={`page${v}`}
         >
           {v}
