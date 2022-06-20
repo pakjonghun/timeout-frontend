@@ -27,6 +27,9 @@ export interface getRecordsQuery {
   sortValue: 'ASC' | 'DESC' | null;
   page: number;
   perPage: number;
+  startDate: null | string;
+  endDate: null | string;
+  searchTerm: null | string;
 }
 
 export interface getRecordsResponse {
@@ -58,4 +61,10 @@ export interface adminDeleteRecordsRequest {
 
 export interface adminDeleteRecordResponse {
   message: string;
+}
+
+export interface searchForm {
+  searchTerm?: string;
+  startDate?: string;
+  endDate?: string;
 }

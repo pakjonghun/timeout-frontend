@@ -4,21 +4,33 @@ import { useDeleteManyRecordsMutation, useGetRecordsQuery } from '@redux/service
 import Spinner from '@components/Spinner';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import AdminTable from './AdminTable';
-import { recordWithUser } from '@models/record';
+import { recordWithUser, searchForm } from '@models/record';
 import Page from '@components/Page';
 import { setCursorAdminRecordTableHeadByUser, setPageAdminRecordTableHeadByUser } from '@redux/features/record';
 import { perCursor } from '@models/tables';
 import { toast } from 'react-toastify';
 import socket from '../../../socket.io';
+import { useLocation } from 'react-router-dom';
+import SearchForm from '@pages/Record/SearchForm';
 
-const Record = () => {
+interface props {
+  onValid: ({ searchTerm, startDate, endDate }: searchForm) => void;
+}
+
+const Record: React.FC<props> = ({ onValid }) => {
+  const { pathname } = useLocation();
+
   const dispatch = useAppDispatch();
   const curCursor = useAppSelector((state) => state.record.adminRecordTableHeadByUser.cursor);
   const page = useAppSelector((state) => state.record.adminRecordTableHeadByUser.page);
   const perPage = useAppSelector((state) => state.record.adminRecordTableHeadByUser.perPage);
   const sortKey = useAppSelector((state) => state.record.adminRecordTableHeadByUser.sort.sortKey);
   const sortValue = useAppSelector((state) => state.record.adminRecordTableHeadByUser.sort.sortValue);
-  const { data, isLoading } = useGetRecordsQuery({ page, perPage, sortKey, sortValue });
+  const searchTerm = useAppSelector((state) => state.record.adminRecordTableHeadByUser.searchTerm);
+  const startDate = useAppSelector((state) => state.record.adminRecordTableHeadByUser.startDate);
+  const endDate = useAppSelector((state) => state.record.adminRecordTableHeadByUser.endDate);
+
+  const { data, isLoading } = useGetRecordsQuery({ page, perPage, sortKey, sortValue, endDate, searchTerm, startDate });
   const adminThead = useAppSelector((state) => [...state.record.adminRecordTableHeadByUser.thead]);
   const adminData = data?.data as unknown as recordWithUser[];
   const selectedList = useAppSelector((state) => state.record.adminRecordTableHeadByUser.selectedItemList);
@@ -83,34 +95,38 @@ const Record = () => {
     }
   }, [selectedList, deleteRecordsMutation]);
 
-  if (isLoading) return <Spinner classes="h-5 w-5" />;
-
   return (
-    <MainLayout title="Record">
-      <div className="w-fit mt-10 mx-auto space-y-3">
-        <button
-          onClick={deleteManyRecords}
-          className="py-1 px-3 bg-gray-500 text-gray-50 font-medium text-xs rounded-md shadow-sm hover:ring-1 ring-gray-500 active:ring-0"
-        >
-          선택 기록 삭제
-        </button>
-        <AdminTable
-          page={
-            <Page
-              curPage={page}
-              curCursor={curCursor}
-              totalPage={data!.totalPage}
-              onPageClick={onPageClick}
-              onLastClick={onLastClick}
-              onNextCursor={onNextCursor}
-              onFirstClick={onFirstClick}
-              onPreviousCursor={onPreviousCursor}
-            />
-          }
-          thead={adminThead}
-          tbody={adminData}
-        />
-      </div>
+    <MainLayout title={pathname == '/search' ? <SearchForm onValid={onValid} /> : 'Record'}>
+      {isLoading ? (
+        <div className="absolute inset-0 flex justify-center items-center">
+          <Spinner classes="h-7 w-7" />
+        </div>
+      ) : (
+        <div className="w-fit mt-10 mx-auto space-y-3">
+          <button
+            onClick={deleteManyRecords}
+            className="py-1 px-3 bg-gray-500 text-gray-50 font-medium text-xs rounded-md shadow-sm hover:ring-1 ring-gray-500 active:ring-0"
+          >
+            선택 기록 삭제
+          </button>
+          <AdminTable
+            page={
+              <Page
+                curPage={page}
+                curCursor={curCursor}
+                totalPage={data!.totalPage}
+                onPageClick={onPageClick}
+                onLastClick={onLastClick}
+                onNextCursor={onNextCursor}
+                onFirstClick={onFirstClick}
+                onPreviousCursor={onPreviousCursor}
+              />
+            }
+            thead={adminThead}
+            tbody={adminData}
+          />
+        </div>
+      )}
     </MainLayout>
   );
 };

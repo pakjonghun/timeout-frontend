@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './features/user';
 import timer from './features/timer';
 import record from './features/record';
+import admin from './features/admin';
 import api from './services/index';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   timer,
   user,
   record,
+  admin,
 });
 
 const store = configureStore({

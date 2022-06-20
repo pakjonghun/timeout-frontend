@@ -11,12 +11,18 @@ import api from '.';
 const recordApi = api.injectEndpoints({
   endpoints: (build) => ({
     getRecords: build.query<getRecordsResponse, getRecordsQuery>({
-      query: ({ page, perPage, sortValue, sortKey }) => {
-        if (sortValue == null || sortKey == null) {
-          return `/records?page=${page}&perPage=${perPage}`;
+      query: ({ page, perPage, sortValue, sortKey, endDate, searchTerm, startDate }) => {
+        const URL = new URLSearchParams();
+        URL.append('page', page + '');
+        URL.append('perPage', perPage + '');
+        if (endDate) URL.append('endDate', endDate);
+        if (startDate) URL.append('startDate', startDate);
+        if (searchTerm) URL.append('searchTerm', searchTerm);
+        if (sortValue && sortKey) {
+          URL.append('sortKey', sortKey);
+          URL.append('sortValue', sortValue);
         }
-
-        return `/records?page=${page}&perPage=${perPage}&sortValue=${sortValue}&sortKey=${sortKey}`;
+        return `records?${URL.toString()}`;
       },
 
       providesTags: ['Record'],

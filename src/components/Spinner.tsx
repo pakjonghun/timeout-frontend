@@ -8,7 +8,7 @@ interface props {
 const Spinner: React.FC<props> = ({ classes }) => {
   return (
     <svg
-      className={joinStyle('fill-inherit', classes ? classes : '')}
+      className={joinStyle('animate-spin fill-inherit', classes ? classes : '')}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
     >

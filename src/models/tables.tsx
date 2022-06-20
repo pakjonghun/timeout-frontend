@@ -36,11 +36,3 @@ export const adminRecordTableHeadByUser: TableKeys<AdminRecordTableHeadByUserKey
   { id: 16, key: 'status', title: '상태' },
   { id: 32, key: 'admin', title: '관리' },
 ];
-
-export type RecordTableHeadByDateKeys = 'date' | 'count' | 'averageDuration' | 'totalDuration';
-export const recordTableHeadByDate: TableKeys<RecordTableHeadByDateKeys>[] = [
-  { id: 18, key: 'date', title: '날짜' },
-  { id: 19, key: 'count', title: '건수' },
-  { id: 20, key: 'averageDuration', title: '평균 근무시간' },
-  { id: 21, key: 'totalDuration', title: '총 근무 시간' },
-];

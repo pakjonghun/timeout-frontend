@@ -9,6 +9,7 @@ import Td from './Td';
 import { useDeleteRecordMutation } from '@redux/services/record';
 import { toast } from 'react-toastify';
 import socket from '../../../../socket.io';
+import { getTime } from '@utils/commonUtils';
 
 interface props {
   tbody: recordWithUser[];
@@ -134,13 +135,3 @@ const Tbody: React.FC<props> = ({ tbody }) => {
 };
 
 export default Tbody;
-
-function getTime(duration: number) {
-  const minuteTerm = 1000 * 60;
-  const hourTerm = 1000 * 60 * 60;
-
-  const hour = Math.abs(Math.floor(duration / hourTerm));
-  const minute = Math.round(((duration % hourTerm) * (hour || 1)) / minuteTerm);
-
-  return `0${hour}:${minute.toString().length == 2 ? minute : '0' + minute}`;
-}

@@ -1,6 +1,7 @@
 import useLoginSocket from '@hooks/useLoginSocket';
 import usePrivate from '@hooks/usePrivate';
-import { useAppSelector } from '@hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
+import { setDoneUserList, setWorkingUserList } from '@redux/features/admin';
 import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import socket from '../../socket.io';
@@ -9,11 +10,12 @@ import WorkingImage from './WorkingImage';
 
 interface props {
   children: React.ReactNode;
-  title: string;
+  title: string | React.ReactNode;
 }
 
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
+  const dispatch = useAppDispatch();
 
   const { isLoading, data } = usePrivate();
   useLoginSocket(data?.data.id, data?.data.role);
@@ -23,8 +25,9 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
       toast.error(msg);
     });
 
-    socket.on('workingUsers', (workingUsers) => {
-      // console.log(workingUsers);
+    socket.on('workingUsers', (list) => {
+      dispatch(setWorkingUserList(list.workingUserList));
+      dispatch(setDoneUserList(list.doneUserList));
     });
 
     socket.on('notice', (msg) => {
@@ -49,7 +52,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
         </div>
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>
       </header>
-      <main>{children}</main>
+      <main className="relative min-h-[80vh]">{children}</main>
     </section>
   );
 };

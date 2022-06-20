@@ -1,18 +1,18 @@
-import {
-  AdminRecordTableHeadByUserKeys,
-  RecordTableHeadByDateKeys,
-  UserRecordTableHeadByRecentKeys,
-} from './../../models/tables';
-import { userRecordTableHeadByRecent, adminRecordTableHeadByUser, recordTableHeadByDate } from '@models/tables';
+import { AdminRecordTableHeadByUserKeys, UserRecordTableHeadByRecentKeys } from './../../models/tables';
+import { userRecordTableHeadByRecent, adminRecordTableHeadByUser } from '@models/tables';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type InitialState = {
+  isSearch: boolean;
   userRecordTableHeadByRecent: {
     thead: typeof userRecordTableHeadByRecent;
     sort: { sortKey: UserRecordTableHeadByRecentKeys | null; sortValue: 'ASC' | 'DESC' | null };
     cursor: number;
     page: number;
     perPage: number;
+    startDate: null | string;
+    endDate: null | string;
+    searchTerm: null | string;
   };
 
   adminRecordTableHeadByUser: {
@@ -24,24 +24,23 @@ type InitialState = {
     perPage: number;
     isAllSelected: boolean;
     openedItemId: number | null;
-  };
-
-  recordTableHeadByDate: {
-    thead: typeof recordTableHeadByDate;
-    sort: { sortKey: RecordTableHeadByDateKeys | null; sortValue: 'ASC' | 'DESC' | null };
-    cursor: number;
-    page: number;
-    perPage: number;
+    startDate: null | string;
+    endDate: null | string;
+    searchTerm: null | string;
   };
 };
 
 const initialState: InitialState = {
+  isSearch: false,
   userRecordTableHeadByRecent: {
     thead: userRecordTableHeadByRecent,
     sort: { sortKey: null, sortValue: null },
     cursor: 1,
     page: 1,
     perPage: 13,
+    startDate: null,
+    endDate: null,
+    searchTerm: null,
   },
   adminRecordTableHeadByUser: {
     thead: adminRecordTableHeadByUser,
@@ -52,13 +51,9 @@ const initialState: InitialState = {
     perPage: 13,
     isAllSelected: false,
     openedItemId: null,
-  },
-  recordTableHeadByDate: {
-    thead: recordTableHeadByDate,
-    sort: { sortKey: null, sortValue: null },
-    cursor: 1,
-    page: 1,
-    perPage: 13,
+    startDate: null,
+    endDate: null,
+    searchTerm: null,
   },
 };
 
@@ -66,6 +61,24 @@ const recordSlice = createSlice({
   name: 'recordSlice',
   initialState,
   reducers: {
+    setAdminSearchTerm: (state, { payload }: PayloadAction<string | null>) => {
+      state.adminRecordTableHeadByUser.searchTerm = payload;
+    },
+    setUserSearchTerm: (state, { payload }: PayloadAction<string | null>) => {
+      state.userRecordTableHeadByRecent.searchTerm = payload;
+    },
+    setAdminStartDate: (state, { payload }: PayloadAction<string | null>) => {
+      state.adminRecordTableHeadByUser.startDate = payload;
+    },
+    setUserStartDate: (state, { payload }: PayloadAction<string | null>) => {
+      state.userRecordTableHeadByRecent.startDate = payload;
+    },
+    setAdminEndtDate: (state, { payload }: PayloadAction<string | null>) => {
+      state.adminRecordTableHeadByUser.endDate = payload;
+    },
+    setUserEndtDate: (state, { payload }: PayloadAction<string | null>) => {
+      state.userRecordTableHeadByRecent.endDate = payload;
+    },
     toggleAdminOpenedItem: (state, { payload }: PayloadAction<number>) => {
       if (state.adminRecordTableHeadByUser.openedItemId === payload) {
         state.adminRecordTableHeadByUser.openedItemId = null;
@@ -73,7 +86,6 @@ const recordSlice = createSlice({
         state.adminRecordTableHeadByUser.openedItemId = payload;
       }
     },
-
     toggleAdminRecordTableHeadByUserSelectedItem: (state, { payload }: PayloadAction<number>) => {
       if (!state.adminRecordTableHeadByUser.selectedItemList.some((id) => id === payload)) {
         state.adminRecordTableHeadByUser.selectedItemList.push(payload);
@@ -83,7 +95,6 @@ const recordSlice = createSlice({
         );
       }
     },
-
     setAdminRecordTableHeadByUserIsAllSelected: (state, { payload }: PayloadAction<{ idList: number[] }>) => {
       if (!payload.idList.length) {
         state.adminRecordTableHeadByUser.isAllSelected = false;
@@ -103,7 +114,6 @@ const recordSlice = createSlice({
 
       state.adminRecordTableHeadByUser.isAllSelected = isAllSelected;
     },
-
     toggleAdminRecordTableHeadByUserSelectedItemList: (
       state,
       { payload }: PayloadAction<{ idList: number[]; checked: boolean }>,
@@ -130,10 +140,6 @@ const recordSlice = createSlice({
       state.adminRecordTableHeadByUser.page = payload;
     },
 
-    setPageRecordTableHeadByDate: (state, { payload }: PayloadAction<number>) => {
-      state.recordTableHeadByDate.page = payload;
-    },
-
     setSortUserRecordTableHeadByRecent: (state, { payload }: PayloadAction<UserRecordTableHeadByRecentKeys>) => {
       const { sortValue } = state.userRecordTableHeadByRecent.sort;
       const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
@@ -148,13 +154,6 @@ const recordSlice = createSlice({
       state.adminRecordTableHeadByUser.sort = { sortKey: payload, sortValue: nextSortValue };
     },
 
-    setSortRecordTableHeadByDate: (state, { payload }: PayloadAction<RecordTableHeadByDateKeys>) => {
-      const { sortValue } = state.recordTableHeadByDate.sort;
-      const nextSortValue = sortValue == 'ASC' ? 'DESC' : 'ASC';
-      state.recordTableHeadByDate = { ...initialState.recordTableHeadByDate };
-      state.recordTableHeadByDate.sort = { sortKey: payload, sortValue: nextSortValue };
-    },
-
     setCursorUserRecordTableHeadByRecent: (state, { payload }: PayloadAction<number>) => {
       state.userRecordTableHeadByRecent.cursor = payload;
     },
@@ -162,25 +161,24 @@ const recordSlice = createSlice({
     setCursorAdminRecordTableHeadByUser: (state, { payload }: PayloadAction<number>) => {
       state.adminRecordTableHeadByUser.cursor = payload;
     },
-
-    setCursorRecordTableHeadByDate: (state, { payload }: PayloadAction<number>) => {
-      state.recordTableHeadByDate.cursor = payload;
-    },
   },
 });
 export const {
+  setAdminEndtDate,
+  setAdminSearchTerm,
+  setAdminStartDate,
+  setUserEndtDate,
+  setUserStartDate,
+  setUserSearchTerm,
   toggleAdminOpenedItem,
   setPageUserRecordTableHeadByRecent,
   setPageAdminRecordTableHeadByUser,
-  setPageRecordTableHeadByDate,
   toggleAdminRecordTableHeadByUserSelectedItem,
   toggleAdminRecordTableHeadByUserSelectedItemList,
   setSortUserRecordTableHeadByRecent,
   setSortAdminRecordTableHeadByUser,
-  setSortRecordTableHeadByDate,
   setCursorUserRecordTableHeadByRecent,
   setCursorAdminRecordTableHeadByUser,
-  setCursorRecordTableHeadByDate,
   setAdminRecordTableHeadByUserIsAllSelected,
 } = recordSlice.actions;
 

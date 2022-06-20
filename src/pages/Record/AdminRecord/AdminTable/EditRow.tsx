@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ErrorMessage';
 import { useEditRecordMutation } from '@redux/services/record';
 import socket from '../../../../socket.io';
 import { toast } from 'react-toastify';
+import { getFullDate, getFullTime } from '@utils/commonUtils';
 
 interface props {
   id: number;
@@ -124,7 +125,7 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
                     isBeforeNow: (value: string) => {
                       const { date } = getValues();
                       const valueDate = new Date(`${date} ${value}`);
-                      const diffFormNow = new Date().getTime() - valueDate.getTime();
+                      const diffFormNow = new Date().getTime() - valueDate.getTime() + 24 * 1000 * 60 * 60;
                       if (diffFormNow < 0) return '지금보다 이전의 시간을 입력하세요.';
                       return true;
                     },
@@ -163,7 +164,7 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
                       if (!value) return true;
                       const { date } = getValues();
                       const valueDate = new Date(`${date} ${value}`);
-                      const diffFormNow = new Date().getTime() - valueDate.getTime();
+                      const diffFormNow = new Date().getTime() - valueDate.getTime() + 24 * 1000 * 60 * 60;
                       if (diffFormNow < 0) return '지금보다 이전의 시간을 입력하세요.';
                       return true;
                     },
@@ -195,24 +196,3 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
 };
 
 export default EditRow;
-
-function getFullDate(startTime: Date) {
-  const date = startTime.getDate();
-  const month = startTime.getMonth();
-  const year = startTime.getFullYear();
-
-  const d = date < 10 ? `0${date}` : date;
-  const m = month < 10 ? `0${month}` : month;
-
-  return `${year}-${m}-${d}`;
-}
-
-function getFullTime(startTime: Date) {
-  const hour = startTime.getHours();
-  const minute = startTime.getMinutes();
-
-  const h = hour < 10 ? `0${hour}` : hour;
-  const m = minute < 10 ? `0${minute}` : minute;
-
-  return `${h}:${m}`;
-}

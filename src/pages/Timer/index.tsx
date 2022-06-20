@@ -24,6 +24,8 @@ const Timer = () => {
   }, [dispatch, startTimerMutation]);
 
   const onStopClick = useCallback(() => {
+    const confirm = window.confirm('초과근무를 종료 합니다.');
+    if (!confirm) return;
     endTimerMutation({ endTime: new Date() });
     dispatch(setInitTimer());
   }, [dispatch, endTimerMutation]);
