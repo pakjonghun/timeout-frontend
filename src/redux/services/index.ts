@@ -5,7 +5,7 @@ const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api`, credentials: 'include' }),
   endpoints: () => ({}),
   refetchOnFocus: true,
-  tagTypes: ['MyInfo', 'Record'],
+  tagTypes: ['MyInfo', 'Record', 'MyPrivate'],
 });
 
 export default api;

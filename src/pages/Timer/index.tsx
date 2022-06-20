@@ -85,7 +85,8 @@ const Timer = () => {
       <div className="flex flex-col items-center font-medium text-gray-800 space-y-5">
         <h1 className="text-lg font-bold">Notice</h1>
         <small>초과근무는 오후 7시부터 오후 10시까지 할 수 있습니다.</small>
-        <small>오후 10시가 넘어가면 자동으로 종료됩니다.</small>
+        <small>하지만 지금은 테스트를 목적으로 아무시간이나 초과근무를 진행 할 수 있습니다.</small>
+        <small>오후 10시가 넘어가면 진행중인 근무는 자동으로 종료됩니다.</small>
         <small>열심히 일하는 당신을 응원합니다.</small>
       </div>
     </MainLayout>

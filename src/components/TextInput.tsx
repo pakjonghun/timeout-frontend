@@ -20,7 +20,7 @@ const TextInput: React.FC<props> = ({ register, type = 'text', id, isLabelShow =
         id={id}
         placeholder={id}
         className={joinStyle(
-          'border-gray-400 border-[1px] placeholder:lowercase py-2 px-3 bg-gray-200 rounded-md shadow-md text-sm font-medium focus:outline-none focus:border-pink-300 focus:ring-pink-300 focus:ring-1 placeholder:text-gray-400',
+          'border-gray-300 border-[1px] placeholder:lowercase py-2 px-3 bg-gray-100 rounded-md shadow-md text-sm font-medium focus:outline-none focus:border-pink-300 focus:ring-pink-300 focus:ring-1 placeholder:text-gray-400',
           classes ? classes : '',
         )}
       />

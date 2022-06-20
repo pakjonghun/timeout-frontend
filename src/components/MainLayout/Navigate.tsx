@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
 import socket from '../../socket.io';
+import Avatar from './Avatar';
 
 const Navigate = () => {
   const { data: myInfo } = useGetMyInfoQuery();
@@ -50,8 +51,8 @@ const Navigate = () => {
         <li>
           <Link to="/">
             <img
-              className="h-10 w-10 rounded-full transition-all hover:scale-105 active:scale-100 duration-75"
-              src="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/e50d5927-ca72-4e3f-29b5-48044ff73800/avatar"
+              className="h-10 w-10 rounded-md shadow-sm transition-all hover:scale-105 active:scale-100 duration-75"
+              src="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/945985a0-a262-42ad-4250-da716e3cdb00/avatar"
               alt="home"
             />
           </Link>
@@ -61,9 +62,13 @@ const Navigate = () => {
         })}
       </ul>
       <ul className="flex items-center space-x-5 sm:space-x-7">
-        {subMenuList.map(({ id, ...props }) => (
-          <Menu key={id} {...props} />
-        ))}
+        {subMenuList.map(({ id, icon, ...props }) => {
+          if (id === 5) {
+            return <Menu key={id} icon={<Avatar src={myInfo?.data.avatar} />} {...props} />;
+          }
+
+          return <Menu icon={icon} key={id} {...props} />;
+        })}
         <Menu icon={logout.icon} link={logout.link} title={logout.title} onClick={onLogoutClick} />
       </ul>
     </div>

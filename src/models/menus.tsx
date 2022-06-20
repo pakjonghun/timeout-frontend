@@ -1,3 +1,4 @@
+import Avatar from '@components/MainLayout/Avatar';
 import React from 'react';
 
 export const userMenuList = [
@@ -81,13 +82,6 @@ export const subMenuList = [
   {
     id: 5,
     link: '/avatar',
-    icon: (
-      <img
-        className="h-10 aspect-square rounded-full transition-all hover:scale-105 active:scale-100 duration-75"
-        src="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/edb140c3-555c-4bde-103f-828f90941600/avatar"
-        alt="avatar"
-      />
-    ),
   },
 ];
 

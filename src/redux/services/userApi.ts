@@ -1,3 +1,10 @@
+import {
+  editProfileResponst,
+  editProfileRequest,
+  editPasswordRequest,
+  editPasswordResponse,
+  privateInfo,
+} from './../../models/user';
 import { me, joinForm, loginForm, joinResponse, userResponse } from '@models/user';
 import api from '.';
 
@@ -26,6 +33,10 @@ const userApi = api.injectEndpoints({
       query: () => '/users/me',
       providesTags: ['MyInfo'],
     }),
+    getMyPrivate: build.query<privateInfo, void>({
+      query: () => '/users/private',
+      providesTags: ['MyPrivate'],
+    }),
 
     logout: build.mutation<userResponse, void>({
       query() {
@@ -36,7 +47,35 @@ const userApi = api.injectEndpoints({
       },
       invalidatesTags: ['MyInfo', 'Record'],
     }),
+    editProfile: build.mutation<editProfileResponst, editProfileRequest>({
+      query(body) {
+        return {
+          url: '/users',
+          method: 'PATCH',
+          body,
+        };
+      },
+      invalidatesTags: ['MyInfo'],
+    }),
+    editPassword: build.mutation<editPasswordResponse, editPasswordRequest>({
+      query(body) {
+        return {
+          url: '/users/password',
+          method: 'PATCH',
+          body,
+        };
+      },
+      invalidatesTags: ['MyInfo'],
+    }),
   }),
 });
 
-export const { useGetMyInfoQuery, useLoginMutation, useLogoutMutation, useJoinMutation } = userApi;
+export const {
+  useGetMyPrivateQuery,
+  useEditProfileMutation,
+  useEditPasswordMutation,
+  useGetMyInfoQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useJoinMutation,
+} = userApi;

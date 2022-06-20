@@ -29,7 +29,7 @@ const Page: React.FC<props> = ({
   );
 
   return (
-    <ul className="flex items-center space-x-3 w-fit mx-auto my-5 font-medium text-sm text-gray-400 fill-gray-400 cursor-pointer">
+    <ul className="flex items-center space-x-3 w-fit mx-auto my-5 font-medium text-sm text-gray-400 fill-gray-400 cursor-pointer pt-5">
       <li onClick={onFirstClick} className="active:text-gray-500 hover:text-gray-800">
         처음
       </li>
