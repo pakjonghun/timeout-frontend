@@ -50,6 +50,9 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
         <div className="absolute right-5 -bottom-10 lg:-bottom-11">
           <WorkingImage isWorking={isWorking} />
         </div>
+        {data?.data.role && (
+          <small className="pl-3 font-medium text-gray-800">{`당신의 직책은 ${data?.data.role} 입니다.`}</small>
+        )}
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>
       </header>
       <main className="relative min-h-[80vh]">{children}</main>

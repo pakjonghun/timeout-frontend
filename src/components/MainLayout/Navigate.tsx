@@ -28,9 +28,8 @@ const Navigate = () => {
 
       const temp = myInfo.data.recordList.startTime;
       const startTime = new Date(temp);
-      const currentTime = new Date();
 
-      const difference = Math.abs(currentTime.getTime() - startTime.getTime());
+      const difference = Math.abs(Date.now() - startTime.getTime());
       const hour = Math.floor(difference / (1000 * 60 * 60));
       const minute = (difference % ((hour || 1) * 1000 * 60 * 60)) / (1000 * 60);
       dispatch(setHour(hour));
