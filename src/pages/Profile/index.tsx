@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import MainLayout from '@components/MainLayout';
-import gravatar from 'gravatar';
 import Sticker from '@components/Sticker';
 import { useLocation } from 'react-router-dom';
 import EditProfileForm from './EditProfileForm';
@@ -8,10 +7,11 @@ import EditPasswordForm from './EditPasswordForm';
 import EditAvatarForm from './EditAvatarForm';
 import SelectButton from './SelectButton';
 import { useGetMyInfoQuery, useGetMyPrivateQuery } from '@redux/services/userApi';
+import Avatar from '@components/MainLayout/Avatar';
 
 const Profile = () => {
   const { data: myPrivateInfo } = useGetMyPrivateQuery();
-  const { data: myInfo } = useGetMyInfoQuery();
+  const { data: myInfo, isLoading: isMyInfoLoading } = useGetMyInfoQuery();
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isEditPassword, setIsEditPassword] = useState(false);
   const [isEditAvatar, setIsEditAvatar] = useState(false);
@@ -50,12 +50,7 @@ const Profile = () => {
   return (
     <MainLayout title="Profile">
       <div className="w-fit mx-auto pt-10 flex space-x-10">
-        <img
-          onClick={onEditAvatarClick}
-          className="rounded-full w-28 h-28 shadow-md"
-          src={myInfo?.data.avatar || gravatar.url('avatar', { s: '80px', d: 'retro' })}
-          alt="avatar"
-        />
+        <Avatar isLoading={isMyInfoLoading} src={myInfo?.data.avatar} src2={myInfo?.data.avatar2} size="large" />
         <div className="flex flex-col text-gray-800 space-y-3 font-medium text-sm">
           <span>{myPrivateInfo?.data.name}</span>
           <span>{myPrivateInfo?.data.email}</span>

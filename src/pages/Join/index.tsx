@@ -22,7 +22,7 @@ const Join = () => {
 
   const { isLoading: isMyInfoChecking } = usePublic();
 
-  const [joinMutation, { isSuccess, isLoading, error }] = useJoinMutation();
+  const [joinMutation, { isSuccess, error }] = useJoinMutation();
 
   const onValid = useCallback(
     (data: joinForm) => {

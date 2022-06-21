@@ -106,11 +106,6 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
               <input
                 {...register('startTime', {
                   validate: {
-                    // inRange: (value: string) => {
-                    //   const [h] = value.split(':');
-                    //   if (+h < 19 || +h >= 23) return '초과근무 시간이 아닙니다.';
-                    //   return true;
-                    // },
                     isBeforeEndTime: (value: string) => {
                       const { endTime, startTime, date } = getValues();
                       if (!endTime || !startTime) return true;
@@ -142,12 +137,6 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
               <input
                 {...register('endTime', {
                   validate: {
-                    // inRange: (value?: string) => {
-                    //   if (!value) return true;
-                    //   const [h] = value.split(':');
-                    //   if (+h < 19 || +h >= 23) return '초과근무 시간이 아닙니다.';
-                    //   return true;
-                    // },
                     isAfterStartTime: (value?: string) => {
                       if (!value) return true;
                       const { endTime, startTime, date } = getValues();

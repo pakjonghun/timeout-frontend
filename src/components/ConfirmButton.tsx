@@ -1,5 +1,5 @@
-import { joinStyle } from '@utils/styleUtils';
 import React from 'react';
+import { joinStyle } from '@utils/styleUtils';
 
 interface props {
   title: string;

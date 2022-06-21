@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useGetMyInfoQuery } from '@redux/services/userApi';
 import socket from '../socket.io';
+
 const usePrivate = () => {
   const navigate = useNavigate();
 

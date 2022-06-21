@@ -1,8 +1,8 @@
+import React, { useEffect } from 'react';
 import useLoginSocket from '@hooks/useLoginSocket';
 import usePrivate from '@hooks/usePrivate';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setDoneUserList, setWorkingUserList } from '@redux/features/admin';
-import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import socket from '../../socket.io';
 import Navigate from './Navigate';
@@ -39,7 +39,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
       socket.off('notice');
       socket.off('workingUsers');
     };
-  }, []);
+  }, [dispatch]);
 
   if (isLoading) return null;
 

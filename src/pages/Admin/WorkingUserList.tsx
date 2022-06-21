@@ -1,5 +1,5 @@
-import { getTime } from '@utils/commonUtils';
 import React from 'react';
+import { getTime } from '@utils/commonUtils';
 
 interface props {
   userList: { id: number; name: string; sumDuration: number }[];

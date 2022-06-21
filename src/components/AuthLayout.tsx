@@ -1,5 +1,6 @@
-import { joinStyle } from '@utils/styleUtils';
 import React from 'react';
+import { joinStyle } from '@utils/styleUtils';
+import WelcomeMessages from './WelcomeMessages';
 
 interface props {
   image: string;
@@ -17,16 +18,14 @@ const AuthLayout: React.FC<props> = ({ children, image, classes }) => {
             classes ? classes : '',
           )}
         >
-          <h1>초과근무 관리</h1>
-          <p>방문을 환영합니다!</p>
+          <WelcomeMessages />
         </div>
         <img src={image} alt="clock" className="h-full" />
       </section>
 
       <article className="pt-[15vh] lg:pt-[17vh] mx-auto max-w-[33rem] lg:max-w-[34rem] w-full h-screen px-16 space-y-10">
         <header className="lg:hidden flex flex-col justify-center items-center font-bold text-xl text-gray-800">
-          <h1>초과근무 관리</h1>
-          <p>방문을 환영합니다!</p>
+          <WelcomeMessages />
         </header>
         <main>{children}</main>
       </article>

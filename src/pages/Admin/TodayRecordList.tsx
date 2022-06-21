@@ -1,6 +1,6 @@
+import React from 'react';
 import { useAppSelector } from '@hooks/useRedux';
 import { getFullTime, getTime } from '@utils/commonUtils';
-import React from 'react';
 
 const TodayRecordList = () => {
   const doneList = useAppSelector((state) => state.admin.doneUserList);

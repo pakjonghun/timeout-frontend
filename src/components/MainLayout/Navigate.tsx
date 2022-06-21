@@ -10,7 +10,12 @@ import socket from '../../socket.io';
 import Avatar from './Avatar';
 
 const Navigate = () => {
-  const { data: myInfo } = useGetMyInfoQuery();
+  const {
+    data: myInfo,
+    isLoading: isMyInfoLoading,
+    isFetching: isMyInfoFetching,
+    isSuccess: isMyInfoSuccess,
+  } = useGetMyInfoQuery();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -18,7 +23,7 @@ const Navigate = () => {
   useGetMyInfoQuery();
 
   useEffect(() => {
-    if (myInfo?.data.recordList) {
+    if (!isMyInfoLoading && !isMyInfoFetching && isMyInfoSuccess && myInfo?.data.recordList) {
       dispatch(setIsWorking(true));
 
       const temp = myInfo.data.recordList.startTime;
@@ -31,7 +36,7 @@ const Navigate = () => {
       dispatch(setHour(hour));
       dispatch(setMinute(Math.round(minute)));
     }
-  }, [myInfo, dispatch]);
+  }, [myInfo, isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, dispatch]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
@@ -42,8 +47,9 @@ const Navigate = () => {
 
   const onLogoutClick = useCallback(() => {
     logoutMutation();
+    dispatch(setIsWorking(false));
     socket.emit('logout');
-  }, [logoutMutation]);
+  }, [logoutMutation, dispatch]);
 
   return (
     <div className="flex justify-between py-2 px-4 sm:px-5 border-b-2">
@@ -64,7 +70,13 @@ const Navigate = () => {
       <ul className="flex items-center space-x-5 sm:space-x-7">
         {subMenuList.map(({ id, icon, ...props }) => {
           if (id === 5) {
-            return <Menu key={id} icon={<Avatar src={myInfo?.data.avatar} />} {...props} />;
+            return (
+              <Menu
+                key={id}
+                icon={<Avatar isLoading={isMyInfoLoading} src2={myInfo?.data.avatar} src={myInfo?.data.avatar2} />}
+                {...props}
+              />
+            );
           }
 
           return <Menu icon={icon} key={id} {...props} />;

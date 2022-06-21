@@ -1,4 +1,3 @@
-import Avatar from '@components/MainLayout/Avatar';
 import React from 'react';
 
 export const userMenuList = [

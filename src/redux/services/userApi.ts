@@ -4,6 +4,7 @@ import {
   editPasswordRequest,
   editPasswordResponse,
   privateInfo,
+  avatarResponse,
 } from './../../models/user';
 import { me, joinForm, loginForm, joinResponse, userResponse } from '@models/user';
 import api from '.';
@@ -55,7 +56,6 @@ const userApi = api.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ['MyInfo'],
     }),
     editPassword: build.mutation<editPasswordResponse, editPasswordRequest>({
       query(body) {
@@ -67,10 +67,21 @@ const userApi = api.injectEndpoints({
       },
       invalidatesTags: ['MyInfo'],
     }),
+    uploadAvatar: build.mutation<avatarResponse, FormData>({
+      query(body) {
+        return {
+          url: '/users/avatar',
+          method: 'POST',
+          body,
+        };
+      },
+      invalidatesTags: ['MyInfo'],
+    }),
   }),
 });
 
 export const {
+  useUploadAvatarMutation,
   useGetMyPrivateQuery,
   useEditProfileMutation,
   useEditPasswordMutation,

@@ -69,6 +69,7 @@ export interface me {
     id: number;
     role: 'Manager' | 'Client';
     avatar?: string | null;
+    avatar2?: string | null;
     recordList: record;
   };
   message: string;
@@ -82,4 +83,15 @@ export interface privateInfo {
     name: string;
   };
   message: string;
+}
+
+export interface avatarForm {
+  avatar: FileList;
+}
+
+export interface avatarResponse {
+  data: {
+    origina: string;
+    resized: string;
+  };
 }

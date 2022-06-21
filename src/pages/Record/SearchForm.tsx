@@ -97,8 +97,6 @@ const SearchForm: React.FC<props> = ({ onValid }) => {
                     },
                     isBeforeNow: (value?: string) => {
                       if (!value) return true;
-                      console.log(Date.now() - new Date(value).getTime(), value);
-
                       const diffFormNow = Date.now() - new Date(value).getTime() + 24 * 1000 * 60 * 60;
                       if (diffFormNow < 0) return '종료 날짜는 지금보다 이전의 날짜을 입력하세요.';
                       return true;

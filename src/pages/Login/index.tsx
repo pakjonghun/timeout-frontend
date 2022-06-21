@@ -26,7 +26,6 @@ const Login = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-      console.log(data?.data);
       toast.success('로그인 성공 했습니다.');
       socket.emit('login', { id: data?.data.id, role: data?.data.role });
       navigate('/');

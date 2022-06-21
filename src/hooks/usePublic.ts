@@ -1,7 +1,7 @@
+import { useEffect } from 'react';
 import { useGetMyInfoQuery } from '@redux/services/userApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const usePublic = () => {
   const navigate = useNavigate();
