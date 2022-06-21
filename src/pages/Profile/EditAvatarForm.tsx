@@ -8,6 +8,7 @@ import { setPreviewImage } from '@redux/features/user';
 import { useUploadAvatarMutation } from '@redux/services/userApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '@components/ErrorMessage';
 
 interface props {
   closeAllInput: () => void;
@@ -15,7 +16,12 @@ interface props {
 const EditAvatarForm: React.FC<props> = ({ closeAllInput }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { register, watch, handleSubmit } = useForm<avatarForm>({ mode: 'onChange' });
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<avatarForm>({ mode: 'onChange' });
 
   const [uploadMutation, { isLoading, isSuccess, isError }] = useUploadAvatarMutation();
 
@@ -68,7 +74,7 @@ const EditAvatarForm: React.FC<props> = ({ closeAllInput }) => {
         register={register('avatar', {
           validate: {
             checkSize: (v: FileList) => {
-              if (v[0].size >= 1024 * 2) return '이미지 사이즈는 2mb 이하 입니다.';
+              if (v[0].size >= 1024 * 1024 * 2) return '이미지 사이즈는 2mb 이하 입니다.';
               return true;
             },
           },
@@ -77,6 +83,7 @@ const EditAvatarForm: React.FC<props> = ({ closeAllInput }) => {
         type="file"
         classes="hover:border-pink-300"
       />
+      <ErrorMessage errorMessage={errors?.avatar?.message} />
 
       <input accept="image/*" />
       <div className="flex space-x-3 pt-5">

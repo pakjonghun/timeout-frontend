@@ -19,8 +19,6 @@ module.exports = merge(commonConfig, {
     rules: [
       {
         test: /\.css$/,
-        // include: resolve(__dirname, 'src'),
-        // exclude: resolve(__dirname, 'node_modules'),
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
