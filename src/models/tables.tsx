@@ -1,4 +1,4 @@
-export const perCursor = 3;
+export const perCursor = 5;
 
 export type TableHead = {
   title: string;

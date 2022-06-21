@@ -1,6 +1,7 @@
 import React from 'react';
 import Sticker from '@components/Sticker';
 import { record } from '@models/record';
+import { getFullDate, getTime } from '@utils/commonUtils';
 
 interface props {
   tbody: record[];
@@ -18,7 +19,7 @@ const Tbody: React.FC<props> = ({ tbody }) => {
 
         return (
           <tr key={id} className="whitespace-nowrap hover:bg-orange-50">
-            <td className="py-3 text-center">{startDate.toLocaleDateString()}</td>
+            <td className="py-3 text-center">{getFullDate(startDate)}</td>
             <td className="py-3 text-center ">
               {startDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
             </td>
@@ -41,13 +42,3 @@ const Tbody: React.FC<props> = ({ tbody }) => {
 };
 
 export default Tbody;
-
-function getTime(duration: number) {
-  const minuteTerm = 1000 * 60;
-  const hourTerm = 1000 * 60 * 60;
-
-  const hour = Math.abs(Math.floor(duration / hourTerm));
-  const minute = Math.round(((duration % hourTerm) * (hour || 1)) / minuteTerm);
-
-  return `0${hour}:${minute.toString().length == 2 ? minute : '0' + minute}`;
-}
