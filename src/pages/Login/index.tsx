@@ -21,8 +21,11 @@ const Login = () => {
   const [loginMuataion, { isLoading, error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
-    if (error) toast.error((error as { error: string }).error);
-  }, [error]);
+    if (!isLoading && error) {
+      console.log(error);
+      toast.error((error as { data: { message: string } }).data.message);
+    }
+  }, [error, isLoading]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
@@ -46,6 +49,7 @@ const Login = () => {
 
   const onValid = useCallback(
     (data: loginForm) => {
+      console.log(data);
       loginMuataion(data);
     },
     [loginMuataion],
@@ -55,9 +59,23 @@ const Login = () => {
 
   return (
     <AuthLayout
-      classes="inset-y-0"
-      image="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/945985a0-a262-42ad-4250-da716e3cdb00/origin"
+      classes="pt-[19%]"
+      image="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/314752ff-dc41-4b33-19a7-9aea8e398700/origin"
     >
+      <div className="grid grid-cols-2 px-5 py-3  bg-slate-100 mb-5 rounded-md shadow-md ">
+        <div className="space-y-3">
+          <h1 className="font-medium whitespace-nowrap">테스트 Manager 계정</h1>
+          <div className="flex flex-col ">
+            <small>ID : manager@email.com</small> <small>PW : 123</small>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <h1 className="font-medium whitespace-nowrap">테스트 Client 계정</h1>
+          <div className="flex flex-col ">
+            <small>ID : client@email.com</small> <small>PW : 123</small>
+          </div>
+        </div>
+      </div>
       <form onSubmit={handleSubmit(onValid)} className="w-full space-y-8">
         <TextInput
           id="email"
@@ -66,9 +84,6 @@ const Login = () => {
             pattern: {
               value: /^[a-zA-Z0-9]{1,20}\@[a-zA-Z0-9]{1,20}\.[a-zA-Z]{1,10}$/,
               message: '이메일 형식이 올바르지 않습니다.',
-            },
-            validate: {
-              isSpace: (v: string) => !/[\s]/.test(v) || '공백은 포함할 수 없습니다.',
             },
           })}
         />
@@ -80,13 +95,16 @@ const Login = () => {
             maxLength: { value: 10, message: '비밀번호는 10자리 이하 입니다.' },
             minLength: { value: 2, message: '비밀번호는 2자리 이상 입니다.' },
             validate: {
-              isSpace: (v: string) => !/[\s]/.test(v) || '공백은 포함할 수 없습니다.',
+              isSpace: (v: string) => {
+                const test = /[\s]/.test(v);
+                return test ? '공백은 포함할 수 없습니다.' : true;
+              },
             },
           })}
         />
         <ErrorMessage errorMessage={errors.password?.message} />
         <div>
-          <ConfirmButton title="login" />
+          <ConfirmButton type="submit" title="login" />
         </div>
         <div className="space-x-5 font-medium  text-sm">
           <span className="text-gray-800">계정이 없으세요?</span>

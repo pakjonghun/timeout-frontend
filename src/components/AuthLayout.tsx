@@ -10,11 +10,11 @@ interface props {
 
 const AuthLayout: React.FC<props> = ({ children, image, classes }) => {
   return (
-    <section className="lg:grid lg:grid-cols-[514px_minmax(10rem,_1fr)]">
-      <section className="hidden lg:block lg:w-[514px] opacity-70 backdrop-blur-sm">
+    <section className="h-screen min-w-[650px] lg:grid lg:grid-cols-[514px_minmax(10rem,_1fr)]">
+      <section className="h-full hidden lg:block lg:w-[514px] opacity-90 backdrop-blur-sm">
         <div
           className={joinStyle(
-            'absolute inset-x-0 flex flex-col justify-center items-center font-bold text-xl text-gray-200',
+            'absolute w-full flex flex-col justify-center items-center font-bold text-xl text-orange-300',
             classes ? classes : '',
           )}
         >
@@ -23,7 +23,7 @@ const AuthLayout: React.FC<props> = ({ children, image, classes }) => {
         <img src={image} alt="clock" className="h-full" />
       </section>
 
-      <article className="pt-[15vh] lg:pt-[17vh] mx-auto max-w-[33rem] lg:max-w-[34rem] w-full h-screen px-16 space-y-10">
+      <article className="py-10 lg:py-16 mx-auto max-w-[33rem] lg:max-w-[34rem] w-full px-16 space-y-10">
         <header className="lg:hidden flex flex-col justify-center items-center font-bold text-xl text-gray-800">
           <WelcomeMessages />
         </header>

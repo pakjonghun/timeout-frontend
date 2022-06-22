@@ -55,12 +55,6 @@ const EditProfileForm: React.FC<props> = ({ email, phone, closeAllInput }) => {
             value: /^[0-9]{11}$/,
             message: '휴대폰 번호는 11자리 숫자 입니다.',
           },
-          validate: {
-            isSpace: (v?: number) => {
-              if (v == null) return true;
-              return !/[\s]/.test(v + '') || '공백은 포함할 수 없습니다.';
-            },
-          },
         })}
         id="phone"
       />
@@ -71,12 +65,6 @@ const EditProfileForm: React.FC<props> = ({ email, phone, closeAllInput }) => {
           pattern: {
             value: /^[a-zA-Z0-9]{1,20}\@[a-zA-Z0-9]{1,20}\.[a-zA-Z]{1,10}$/,
             message: '이메일 형식이 올바르지 않습니다.',
-          },
-          validate: {
-            isSpace: (v?: string) => {
-              if (!v) return true;
-              return !/[\s]/.test(v) || '공백은 포함할 수 없습니다.';
-            },
           },
         })}
         id="email"

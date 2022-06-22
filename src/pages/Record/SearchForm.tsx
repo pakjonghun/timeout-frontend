@@ -3,6 +3,7 @@ import TextInput from '@components/TextInput';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from '@components/ErrorMessage';
 import { searchForm } from '@models/record';
+import { useGetMyInfoQuery } from '@redux/services/userApi';
 
 interface props {
   onValid: ({ searchTerm, startDate, endDate }: searchForm) => void;
@@ -19,6 +20,8 @@ const SearchForm: React.FC<props> = ({ onValid }) => {
     defaultValues: {},
   });
 
+  const { data } = useGetMyInfoQuery();
+
   return (
     <div className="flex flex-col w-fit mx-auto">
       <form onSubmit={handleSubmit(onValid)} className="relative flex-1 mx-auto z-10">
@@ -29,6 +32,7 @@ const SearchForm: React.FC<props> = ({ onValid }) => {
         </div>
         <div className="grid grid-cols-[15rem_1fr]">
           <TextInput
+            placeholder={data?.data.role === 'Manager' ? '사용자 이름을 입력하세요' : '초과근무 사유를 입력하세요'}
             register={register('searchTerm')}
             classes=" w-full pr-2 pl-10 pr-3 border-gray-800 rounded-none"
             id="search"
