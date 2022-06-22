@@ -1,25 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGetMyInfoQuery } from '@redux/services/userApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-const usePublic = () => {
+const usePublic = (isLogin?: boolean) => {
   const navigate = useNavigate();
 
-  const { data, isFetching, isLoading, isSuccess } = useGetMyInfoQuery();
+  const { data, isFetching, isLoading, isSuccess, error } = useGetMyInfoQuery();
+
+  const errorCount = useRef<number>(0);
 
   useEffect(() => {
-    console.log('/login isloading', isLoading);
-    console.log('/login isFetching', isFetching);
-    console.log('/login isSuccess', isSuccess);
+    if (!isFetching && isSuccess) {
+      if (isLogin) return;
+      if (errorCount.current) return;
+      //@ts-ignore
+      if (error?.status == 'PARSING_ERROR') {
+        toast.error('서버 연결이 원활하지 않습니다.');
+      }
 
-    if (!!isLoading && !isFetching && isSuccess) {
-      console.log('/login toast');
+      errorCount.current++;
       toast.warn('이미 로그인 중입니다.');
       navigate('/');
-      return;
     }
-  }, [isLoading, isFetching, isSuccess, navigate]);
+  }, [isLoading, isFetching, isLogin, error, isSuccess, navigate]);
 
   return { isLoading, data };
 };

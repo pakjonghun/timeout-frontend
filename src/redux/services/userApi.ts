@@ -20,6 +20,7 @@ const userApi = api.injectEndpoints({
         };
       },
     }),
+
     login: build.mutation<userResponse, loginForm>({
       query(body) {
         return {
@@ -30,10 +31,12 @@ const userApi = api.injectEndpoints({
       },
       invalidatesTags: ['MyInfo'],
     }),
+
     getMyInfo: build.query<me, void>({
       query: () => '/users/me',
       providesTags: ['MyInfo'],
     }),
+
     getMyPrivate: build.query<privateInfo, void>({
       query: () => '/users/private',
       providesTags: ['MyPrivate'],

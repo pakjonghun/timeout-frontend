@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import TextInput from '@components/TextInput';
 import AuthLayout from '@components/AuthLayout';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -13,15 +13,16 @@ import { useAppDispatch } from '@hooks/useRedux';
 import socket from '../../socket.io';
 
 const Login = () => {
+  const [isLogin, setIsLogin] = useState(false);
   const { state } = useLocation();
   const dispatch = useAppDispatch();
   const parsedState = state as { email: string | undefined; password: string | undefined };
   const navigate = useNavigate();
-  const { isLoading: isMyInfoChecking } = usePublic();
+  const { isLoading: isMyInfoChecking } = usePublic(isLogin);
   const [loginMuataion, { isLoading, isError, error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
-    if (!isLoading && isError) {
+    if (!isLoading && isError && !isSuccess && !data) {
       //@ts-ignore
       if (error?.data?.message) {
         toast.error((error as { data: { message: string } }).data.message);
@@ -29,15 +30,16 @@ const Login = () => {
         toast.error('로그인을 실패했습니다.');
       }
     }
-  }, [error, isLoading, isError]);
+  }, [error, isLoading, isError, isSuccess, data]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
       toast.success('로그인 성공 했습니다.');
       socket.emit('login', { id: data?.data.id, role: data?.data.role });
+
       navigate('/');
     }
-  }, [dispatch, isLoading, isSuccess, navigate, data]);
+  }, [dispatch, isLoading, isSuccess, data, navigate]);
 
   const {
     register,
@@ -53,8 +55,8 @@ const Login = () => {
 
   const onValid = useCallback(
     (data: loginForm) => {
-      console.log(data);
       loginMuataion(data);
+      setIsLogin(true);
     },
     [loginMuataion],
   );

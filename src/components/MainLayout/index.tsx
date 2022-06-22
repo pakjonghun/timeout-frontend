@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import useLoginSocket from '@hooks/useLoginSocket';
 import usePrivate from '@hooks/usePrivate';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setDoneUserList, setWorkingUserList } from '@redux/features/admin';
@@ -7,6 +6,7 @@ import { toast } from 'react-toastify';
 import socket from '../../socket.io';
 import Navigate from './Navigate';
 import WorkingImage from './WorkingImage';
+import { useGetMyInfoQuery } from '@redux/services/userApi';
 
 interface props {
   children: React.ReactNode;
@@ -17,8 +17,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
   const dispatch = useAppDispatch();
 
-  const { isLoading, data } = usePrivate();
-  useLoginSocket(data?.data.id, data?.data.role);
+  const { isLoading, data } = useGetMyInfoQuery();
 
   useEffect(() => {
     socket.on('error', (msg) => {

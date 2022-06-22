@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { userMenuList, adminMenuList, subMenuList, logout } from '@models/menus';
 import { Link, useNavigate } from 'react-router-dom';
 import Menu from './Menu';
@@ -8,16 +8,19 @@ import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
 import socket from '../../socket.io';
 import Avatar from './Avatar';
+import usePrivate from '@hooks/usePrivate';
 
 const Navigate = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [isLogout, setIsLogout] = useState(false);
+
   const {
     data: myInfo,
     isLoading: isMyInfoLoading,
     isFetching: isMyInfoFetching,
     isSuccess: isMyInfoSuccess,
-  } = useGetMyInfoQuery();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  } = usePrivate(isLogout);
 
   const [logoutMutation, { isLoading, data, isSuccess, error, isError }] = useLogoutMutation();
   useGetMyInfoQuery();
@@ -38,17 +41,18 @@ const Navigate = () => {
   }, [myInfo, isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, dispatch]);
 
   useEffect(() => {
-    if (!isLoading && isSuccess) {
+    if (!isLoading && isSuccess && !isError) {
       toast.success('안녕히 가세요.');
       navigate('/login');
     }
   }, [isLoading, isSuccess, navigate, dispatch, isError, error, data]);
 
   const onLogoutClick = useCallback(() => {
+    setIsLogout(true);
     logoutMutation();
     dispatch(setIsWorking(false));
     socket.emit('logout');
-  }, [logoutMutation, dispatch]);
+  }, [logoutMutation, dispatch, setIsLogout]);
 
   return (
     <div className="flex justify-between py-2 px-4 sm:px-5 border-b-2">

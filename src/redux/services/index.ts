@@ -1,14 +1,9 @@
-import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-
-const baseQuery = retry(fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api`, credentials: 'include' }), {
-  maxRetries: 0,
-});
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const api = createApi({
   reducerPath: 'api',
-  baseQuery,
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api`, credentials: 'include' }),
   endpoints: () => ({}),
-  refetchOnFocus: true,
   tagTypes: ['MyInfo', 'Record', 'MyPrivate'],
 });
 

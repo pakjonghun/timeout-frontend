@@ -31,18 +31,16 @@ const Join = () => {
     [joinMutation],
   );
 
-  const onError = (e: any) => {
-    console.log(errors);
-  };
-
   useEffect(() => {
-    //@ts-ignore
-    if (error?.data?.message) {
-      toast.error((error as { data: { message: string } }).data.message);
-    } else {
-      toast.error('로그인을 실패했습니다.');
+    if (!isLoading && !isSuccess && error) {
+      //@ts-ignore
+      if (error?.data?.message) {
+        toast.error((error as { data: { message: string } }).data.message);
+      } else {
+        toast.error('로그인을 실패했습니다.');
+      }
     }
-  }, [error, isLoading]);
+  }, [error, isSuccess, isLoading]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -58,7 +56,7 @@ const Join = () => {
       classes="top-[5%]"
       image="https://imagedelivery.net/0ZP-N9B45ji28JoChYUvWw/45232f36-4aa6-4dba-dcfb-ec6af74a0200/origin"
     >
-      <form onSubmit={handleSubmit(onValid, onError)} className="w-full space-y-4">
+      <form onSubmit={handleSubmit(onValid)} className="w-full space-y-4">
         <TextInput
           id="name"
           register={register('name', {
