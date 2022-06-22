@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import usePrivate from '@hooks/usePrivate';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setDoneUserList, setWorkingUserList } from '@redux/features/admin';
@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import socket from '../../socket.io';
 import Navigate from './Navigate';
 import WorkingImage from './WorkingImage';
-import { useGetMyInfoQuery } from '@redux/services/userApi';
 
 interface props {
   children: React.ReactNode;
@@ -16,8 +15,14 @@ interface props {
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const isWorking = useAppSelector((state) => state.timer.isWorking);
   const dispatch = useAppDispatch();
+  const [isLogout, setIsLogout] = useState(false);
 
-  const { isLoading, data } = useGetMyInfoQuery();
+  const {
+    data: myInfo,
+    isLoading: isMyInfoLoading,
+    isFetching: isMyInfoFetching,
+    isSuccess: isMyInfoSuccess,
+  } = usePrivate(isLogout);
 
   useEffect(() => {
     socket.on('error', (msg) => {
@@ -40,17 +45,23 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
     };
   }, [dispatch]);
 
-  if (isLoading) return null;
+  if (isMyInfoLoading || isMyInfoFetching) return null;
 
   return (
     <section className="min-w-[650px] mx-auto max-w-screen-lg">
       <header className="relative">
-        <Navigate />
+        <Navigate
+          setIsLogout={setIsLogout}
+          myInfo={myInfo}
+          isMyInfoLoading={isMyInfoLoading}
+          isMyInfoFetching={isMyInfoFetching}
+          isMyInfoSuccess={isMyInfoSuccess}
+        />
         <div className="absolute right-5 -bottom-10 lg:-bottom-11">
           <WorkingImage isWorking={isWorking} />
         </div>
-        {data?.data.role && (
-          <small className="pl-3 font-medium text-gray-800">{`당신의 직책은 ${data?.data.role} 입니다.`}</small>
+        {myInfo?.data.role && (
+          <small className="pl-3 font-medium text-gray-800">{`당신의 직책은 ${myInfo?.data.role} 입니다.`}</small>
         )}
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>
       </header>

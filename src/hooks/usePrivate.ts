@@ -10,18 +10,18 @@ const usePrivate = (isLogout?: boolean) => {
   const { isFetching, data, isLoading, isError, isSuccess, error } = useGetMyInfoQuery();
 
   const errorCount = useRef<number>(0);
-
   useEffect(() => {
     if (!isFetching && !isSuccess) {
       if (isLogout) return;
       if (errorCount.current) return;
+      errorCount.current++;
       //@ts-ignore
-      if (error?.status == 'PARSING_ERROR') {
+      if (error?.status == 'PARSING_ERROR' || error?.status == 'FETCH_ERROR') {
         toast.error('서버 연결이 원활하지 않습니다.');
+        navigate('/login');
         return;
       }
 
-      errorCount.current++;
       toast.warn('로그인이 필요합니다.');
       navigate('/login');
     }

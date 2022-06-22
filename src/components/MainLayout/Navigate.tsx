@@ -8,19 +8,19 @@ import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
 import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
 import socket from '../../socket.io';
 import Avatar from './Avatar';
-import usePrivate from '@hooks/usePrivate';
+import { me } from '@models/user';
 
-const Navigate = () => {
+interface props {
+  isMyInfoLoading: boolean;
+  isMyInfoFetching: boolean;
+  isMyInfoSuccess: boolean;
+  myInfo?: me;
+  setIsLogout: (isLogin: boolean) => void;
+}
+
+const Navigate: React.FC<props> = ({ isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, myInfo, setIsLogout }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [isLogout, setIsLogout] = useState(false);
-
-  const {
-    data: myInfo,
-    isLoading: isMyInfoLoading,
-    isFetching: isMyInfoFetching,
-    isSuccess: isMyInfoSuccess,
-  } = usePrivate(isLogout);
 
   const [logoutMutation, { isLoading, data, isSuccess, error, isError }] = useLogoutMutation();
   useGetMyInfoQuery();
