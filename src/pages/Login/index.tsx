@@ -55,8 +55,8 @@ const Login = () => {
 
   const onValid = useCallback(
     (data: loginForm) => {
-      loginMuataion(data);
       setIsLogin(true);
+      loginMuataion(data);
     },
     [loginMuataion],
   );

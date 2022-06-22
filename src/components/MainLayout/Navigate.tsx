@@ -1,59 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { userMenuList, adminMenuList, subMenuList, logout } from '@models/menus';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Menu from './Menu';
-import { useAppDispatch } from '@hooks/useRedux';
-import { toast } from 'react-toastify';
-import { useGetMyInfoQuery, useLogoutMutation } from '@redux/services/userApi';
-import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
-import socket from '../../socket.io';
 import Avatar from './Avatar';
 import { me } from '@models/user';
 
 interface props {
   isMyInfoLoading: boolean;
-  isMyInfoFetching: boolean;
-  isMyInfoSuccess: boolean;
   myInfo?: me;
-  setIsLogout: (isLogin: boolean) => void;
+  onLogoutClick: () => void;
 }
 
-const Navigate: React.FC<props> = ({ isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, myInfo, setIsLogout }) => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  const [logoutMutation, { isLoading, data, isSuccess, error, isError }] = useLogoutMutation();
-  useGetMyInfoQuery();
-
-  useEffect(() => {
-    if (!isMyInfoLoading && !isMyInfoFetching && isMyInfoSuccess && myInfo?.data.recordList) {
-      dispatch(setIsWorking(true));
-
-      const temp = myInfo.data.recordList.startTime;
-      const startTime = new Date(temp);
-
-      const difference = Math.abs(Date.now() - startTime.getTime());
-      const hour = Math.floor(difference / (1000 * 60 * 60));
-      const minute = (difference % ((hour || 1) * 1000 * 60 * 60)) / (1000 * 60);
-      dispatch(setHour(hour));
-      dispatch(setMinute(Math.round(minute)));
-    }
-  }, [myInfo, isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, dispatch]);
-
-  useEffect(() => {
-    if (!isLoading && isSuccess && !isError) {
-      toast.success('안녕히 가세요.');
-      navigate('/login');
-    }
-  }, [isLoading, isSuccess, navigate, dispatch, isError, error, data]);
-
-  const onLogoutClick = useCallback(() => {
-    setIsLogout(true);
-    logoutMutation();
-    dispatch(setIsWorking(false));
-    socket.emit('logout');
-  }, [logoutMutation, dispatch, setIsLogout]);
-
+const Navigate: React.FC<props> = ({ onLogoutClick, isMyInfoLoading, myInfo }) => {
   return (
     <div className="flex justify-between py-2 px-4 sm:px-5 border-b-2">
       <ul className="flex items-center space-x-5 sm:space-x-7">

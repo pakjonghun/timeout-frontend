@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import usePrivate from '@hooks/usePrivate';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import { setDoneUserList, setWorkingUserList } from '@redux/features/admin';
@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import socket from '../../socket.io';
 import Navigate from './Navigate';
 import WorkingImage from './WorkingImage';
+import { useNavigate } from 'react-router-dom';
+import { useLogoutMutation } from '@redux/services/userApi';
+import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
 
 interface props {
   children: React.ReactNode;
@@ -13,9 +16,11 @@ interface props {
 }
 
 const MainLayout: React.FC<props> = ({ children, title }) => {
+  const navigate = useNavigate();
   const isWorking = useAppSelector((state) => state.timer.isWorking);
   const dispatch = useAppDispatch();
   const [isLogout, setIsLogout] = useState(false);
+  const [logoutMutation, { isLoading, error, data }] = useLogoutMutation();
 
   const {
     data: myInfo,
@@ -45,18 +50,47 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
     };
   }, [dispatch]);
 
-  if (isMyInfoLoading || isMyInfoFetching) return null;
+  useEffect(() => {
+    if (!isMyInfoLoading && !isMyInfoFetching && isMyInfoSuccess && myInfo?.data.recordList) {
+      dispatch(setIsWorking(true));
+
+      const temp = myInfo.data.recordList.startTime;
+      const startTime = new Date(temp);
+
+      const difference = Math.abs(Date.now() - startTime.getTime());
+      const hour = Math.floor(difference / (1000 * 60 * 60));
+      const minute = (difference % ((hour || 1) * 1000 * 60 * 60)) / (1000 * 60);
+      dispatch(setHour(hour));
+      dispatch(setMinute(Math.round(minute)));
+    }
+  }, [myInfo, isMyInfoLoading, isMyInfoFetching, isMyInfoSuccess, dispatch]);
+
+  useEffect(() => {
+    if (!isLoading && error) {
+      toast.error('로그아웃이 실패했습니다.');
+    }
+  }, [isLoading, error]);
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      toast.success('안녕히 가세요.');
+      dispatch(setIsWorking(false));
+      socket.emit('logout');
+      navigate('/login');
+    }
+  }, [isLoading, navigate, dispatch, error, data]);
+
+  const onLogoutClick = useCallback(() => {
+    setIsLogout(true);
+    logoutMutation();
+  }, [logoutMutation, setIsLogout]);
+
+  if (isMyInfoFetching || isMyInfoLoading || !isMyInfoSuccess) return null;
 
   return (
     <section className="min-w-[650px] mx-auto max-w-screen-lg">
       <header className="relative">
-        <Navigate
-          setIsLogout={setIsLogout}
-          myInfo={myInfo}
-          isMyInfoLoading={isMyInfoLoading}
-          isMyInfoFetching={isMyInfoFetching}
-          isMyInfoSuccess={isMyInfoSuccess}
-        />
+        <Navigate onLogoutClick={onLogoutClick} myInfo={myInfo} isMyInfoLoading={isMyInfoLoading} />
         <div className="absolute right-5 -bottom-10 lg:-bottom-11">
           <WorkingImage isWorking={isWorking} />
         </div>
@@ -65,6 +99,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
         )}
         <h1 className="text-center pt-10 first-letter:uppercase font-bold text-xl">{title}</h1>
       </header>
+
       <main className="relative min-h-[80vh]">{children}</main>
     </section>
   );

@@ -29,7 +29,7 @@ const userApi = api.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ['MyInfo'],
+      invalidatesTags: ['MyInfo', 'MyPrivate'],
     }),
 
     getMyInfo: build.query<me, void>({
@@ -43,13 +43,13 @@ const userApi = api.injectEndpoints({
     }),
 
     logout: build.mutation<userResponse, void>({
-      query() {
+      query: () => {
         return {
           url: '/users/logout',
           method: 'POST',
         };
       },
-      invalidatesTags: ['MyInfo', 'Record'],
+      invalidatesTags: ['MyInfo', 'Record', 'MyPrivate'],
     }),
     editProfile: build.mutation<editProfileResponst, editProfileRequest>({
       query(body) {
