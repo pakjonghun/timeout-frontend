@@ -44,7 +44,10 @@ const Avatar: React.FC<props> = ({ src2, src, size = 'small', callBack, isLoadin
       <img
         className={joinStyle(smallSizeStyle, largeSizeStyle, 'h-10 aspect-square rounded-full')}
         src={src}
-        onError={(event) => (event.currentTarget.src = src2)}
+        onError={(event) => {
+          event.currentTarget.onerror = null;
+          event.currentTarget.src = src2;
+        }}
         alt="avatar"
       />
     );

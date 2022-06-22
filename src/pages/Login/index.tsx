@@ -18,14 +18,18 @@ const Login = () => {
   const parsedState = state as { email: string | undefined; password: string | undefined };
   const navigate = useNavigate();
   const { isLoading: isMyInfoChecking } = usePublic();
-  const [loginMuataion, { isLoading, error, isSuccess, data }] = useLoginMutation();
+  const [loginMuataion, { isLoading, isError, error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
-    if (!isLoading && error) {
-      console.log(error);
-      toast.error((error as { data: { message: string } }).data.message);
+    if (!isLoading && isError) {
+      //@ts-ignore
+      if (error?.data?.message) {
+        toast.error((error as { data: { message: string } }).data.message);
+      } else {
+        toast.error('로그인을 실패했습니다.');
+      }
     }
-  }, [error, isLoading]);
+  }, [error, isLoading, isError]);
 
   useEffect(() => {
     if (!isLoading && isSuccess) {

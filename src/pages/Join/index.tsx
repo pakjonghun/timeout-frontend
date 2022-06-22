@@ -36,8 +36,11 @@ const Join = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && error) {
+    //@ts-ignore
+    if (error?.data?.message) {
       toast.error((error as { data: { message: string } }).data.message);
+    } else {
+      toast.error('로그인을 실패했습니다.');
     }
   }, [error, isLoading]);
 

@@ -9,11 +9,17 @@ const usePublic = () => {
   const { data, isFetching, isLoading, isSuccess } = useGetMyInfoQuery();
 
   useEffect(() => {
-    if (!isFetching && isSuccess) {
+    console.log('/login isloading', isLoading);
+    console.log('/login isFetching', isFetching);
+    console.log('/login isSuccess', isSuccess);
+
+    if (!!isLoading && !isFetching && isSuccess) {
+      console.log('/login toast');
       toast.warn('이미 로그인 중입니다.');
       navigate('/');
+      return;
     }
-  }, [isFetching, isSuccess, navigate]);
+  }, [isLoading, isFetching, isSuccess, navigate]);
 
   return { isLoading, data };
 };
