@@ -1,4 +1,5 @@
 # 초과근무 프로젝트 프론트앤드
+- Backend 저장소는 [링크](https://github.com/pakjonghun/timeout-backend) 입니다
 
 - 엑셀로 직원의 초과근무를 관리하는게 너무 힘들다
 - 초과근무를 관리해 주는 웹사이트가 있으면 어떨까?
