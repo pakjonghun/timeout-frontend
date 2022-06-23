@@ -3,7 +3,7 @@ import { joinStyle } from '@utils/styleUtils';
 import { perCursor } from '@models/tables';
 
 interface props {
-  totalPage: number;
+  totalPage?: number;
   curPage: number;
   curCursor: number;
   onPageClick: (page: number) => void;

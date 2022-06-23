@@ -9,6 +9,7 @@ import WorkingImage from './WorkingImage';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '@redux/services/userApi';
 import { setHour, setIsWorking, setMinute } from '@redux/features/timer';
+import { setIsRefetch } from '@redux/features/record';
 
 interface props {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ interface props {
 const MainLayout: React.FC<props> = ({ children, title }) => {
   const navigate = useNavigate();
   const isWorking = useAppSelector((state) => state.timer.isWorking);
+  const isRefetch = useAppSelector((state) => state.record.isRefetch);
   const dispatch = useAppDispatch();
   const [isLogout, setIsLogout] = useState(false);
   const [logoutMutation, { isLoading, error, data }] = useLogoutMutation();
@@ -40,6 +42,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
     });
 
     socket.on('notice', (msg) => {
+      dispatch(setIsRefetch(isRefetch + 1));
       toast(msg);
     });
 
@@ -48,7 +51,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
       socket.off('notice');
       socket.off('workingUsers');
     };
-  }, [dispatch]);
+  }, [isRefetch, dispatch]);
 
   useEffect(() => {
     if (!isMyInfoLoading && !isMyInfoFetching && isMyInfoSuccess && myInfo?.data.recordList) {
@@ -85,7 +88,7 @@ const MainLayout: React.FC<props> = ({ children, title }) => {
     logoutMutation();
   }, [logoutMutation, setIsLogout]);
 
-  if (isMyInfoFetching || isMyInfoLoading || !isMyInfoSuccess) return null;
+  if (isMyInfoLoading || !isMyInfoSuccess) return null;
 
   return (
     <section className="min-w-[650px] mx-auto max-w-screen-lg">

@@ -11,10 +11,11 @@ import api from '.';
 const recordApi = api.injectEndpoints({
   endpoints: (build) => ({
     getRecords: build.query<getRecordsResponse, getRecordsQuery>({
-      query: ({ page, perPage, sortValue, sortKey, endDate, searchTerm, startDate }) => {
+      query: ({ page, perPage, sortValue, sortKey, endDate, searchTerm, startDate, isRefetch }) => {
         const URL = new URLSearchParams();
         URL.append('page', page + '');
         URL.append('perPage', perPage + '');
+        URL.append('refetch', isRefetch + '');
         if (endDate) URL.append('endDate', endDate);
         if (startDate) URL.append('startDate', startDate);
         if (searchTerm) URL.append('searchTerm', searchTerm);

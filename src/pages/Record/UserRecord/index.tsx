@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import MainLayout from '@components/MainLayout';
 import { useGetRecordsQuery } from '@redux/services/record';
 import Spinner from '@components/Spinner';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
@@ -8,16 +7,8 @@ import { record, searchForm } from '@models/record';
 import Page from '@components/Page';
 import { setCursorUserRecordTableHeadByRecent, setPageUserRecordTableHeadByRecent } from '@redux/features/record';
 import { perCursor } from '@models/tables';
-import { useLocation } from 'react-router-dom';
-import SearchForm from '../SearchForm';
 
-interface props {
-  onValid: ({ searchTerm, startDate, endDate }: searchForm) => void;
-}
-
-const Record: React.FC<props> = ({ onValid }) => {
-  const { pathname } = useLocation();
-
+const Record = () => {
   const dispatch = useAppDispatch();
   const curCursor = useAppSelector((state) => state.record.userRecordTableHeadByRecent.cursor);
   const page = useAppSelector((state) => state.record.userRecordTableHeadByRecent.page);
@@ -28,7 +19,16 @@ const Record: React.FC<props> = ({ onValid }) => {
   const startDate = useAppSelector((state) => state.record.userRecordTableHeadByRecent.startDate);
   const endDate = useAppSelector((state) => state.record.userRecordTableHeadByRecent.endDate);
 
-  const { data, isLoading } = useGetRecordsQuery({ page, perPage, sortKey, sortValue, endDate, searchTerm, startDate });
+  const { data, isLoading } = useGetRecordsQuery({
+    page,
+    perPage,
+    sortKey,
+    sortValue,
+    endDate,
+    searchTerm,
+    startDate,
+    isRefetch: 0,
+  });
   const userThead = useAppSelector((state) => [...state.record.userRecordTableHeadByRecent.thead]);
   const userData = data?.data as unknown as record[];
 
@@ -71,7 +71,7 @@ const Record: React.FC<props> = ({ onValid }) => {
   if (isLoading) return <Spinner classes="h-5 w-5" />;
 
   return (
-    <MainLayout title={pathname == '/search' ? <SearchForm onValid={onValid} /> : 'Record'}>
+    <>
       <UserTable
         page={
           <Page
@@ -88,7 +88,7 @@ const Record: React.FC<props> = ({ onValid }) => {
         thead={userThead}
         tbody={userData}
       />
-    </MainLayout>
+    </>
   );
 };
 

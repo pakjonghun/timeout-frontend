@@ -13,9 +13,13 @@ import {
   setUserSearchTerm,
   setUserStartDate,
 } from '@redux/features/record';
+import MainLayout from '@components/MainLayout';
+import SearchForm from './SearchForm';
+import { useLocation } from 'react-router-dom';
 
 const Record = () => {
   const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
   const { data, isLoading } = useGetMyInfoQuery();
 
   const onValidForUser = useCallback(
@@ -36,16 +40,19 @@ const Record = () => {
     [dispatch],
   );
 
-  switch (true) {
-    case isLoading:
-      return <Spinner classes="h-5 w-5" />;
-    case Boolean(data?.data.role == 'Manager'):
-      return <AdminRecord onValid={onValidForAdmin} />;
-    case Boolean(data?.data.role == 'Client'):
-      return <UserRecord onValid={onValidForUser} />;
-    default:
-      throw new Error('Error on record page');
-  }
+  return (
+    <MainLayout
+      title={
+        pathname == '/search' ? (
+          <SearchForm onValid={data?.data.role == 'Manager' ? onValidForAdmin : onValidForUser} />
+        ) : (
+          'Record'
+        )
+      }
+    >
+      {isLoading ? <Spinner classes="h-5 w-5" /> : data?.data.role === 'Manager' ? <AdminRecord /> : <UserRecord />}
+    </MainLayout>
+  );
 };
 
 export default Record;

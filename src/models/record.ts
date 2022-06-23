@@ -30,6 +30,7 @@ export interface getRecordsQuery {
   startDate: null | string;
   endDate: null | string;
   searchTerm: null | string;
+  isRefetch: number;
 }
 
 export interface getRecordsResponse {

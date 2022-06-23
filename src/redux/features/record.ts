@@ -3,6 +3,7 @@ import { userRecordTableHeadByRecent, adminRecordTableHeadByUser } from '@models
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type InitialState = {
+  isRefetch: number;
   isSearch: boolean;
   userRecordTableHeadByRecent: {
     thead: typeof userRecordTableHeadByRecent;
@@ -31,6 +32,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
+  isRefetch: 0,
   isSearch: false,
   userRecordTableHeadByRecent: {
     thead: userRecordTableHeadByRecent,
@@ -61,6 +63,9 @@ const recordSlice = createSlice({
   name: 'recordSlice',
   initialState,
   reducers: {
+    setIsRefetch: (state, { payload }: PayloadAction<number>) => {
+      state.isRefetch = payload;
+    },
     setAdminSearchTerm: (state, { payload }: PayloadAction<string | null>) => {
       state.adminRecordTableHeadByUser.searchTerm = payload;
     },
@@ -164,6 +169,7 @@ const recordSlice = createSlice({
   },
 });
 export const {
+  setIsRefetch,
   setAdminEndtDate,
   setAdminSearchTerm,
   setAdminStartDate,

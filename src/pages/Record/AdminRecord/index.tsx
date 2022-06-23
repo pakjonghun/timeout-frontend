@@ -1,26 +1,18 @@
 import React, { useCallback, useEffect } from 'react';
-import MainLayout from '@components/MainLayout';
 import { useDeleteManyRecordsMutation, useGetRecordsQuery } from '@redux/services/record';
 import Spinner from '@components/Spinner';
 import { useAppDispatch, useAppSelector } from '@hooks/useRedux';
 import AdminTable from './AdminTable';
-import { recordWithUser, searchForm } from '@models/record';
+import { recordWithUser } from '@models/record';
 import Page from '@components/Page';
 import { setCursorAdminRecordTableHeadByUser, setPageAdminRecordTableHeadByUser } from '@redux/features/record';
 import { perCursor } from '@models/tables';
 import { toast } from 'react-toastify';
 import socket from '../../../socket.io';
-import { useLocation } from 'react-router-dom';
-import SearchForm from '@pages/Record/SearchForm';
 
-interface props {
-  onValid: ({ searchTerm, startDate, endDate }: searchForm) => void;
-}
-
-const Record: React.FC<props> = ({ onValid }) => {
-  const { pathname } = useLocation();
-
+const Record = () => {
   const dispatch = useAppDispatch();
+  const isRefetch = useAppSelector((state) => state.record.isRefetch);
   const curCursor = useAppSelector((state) => state.record.adminRecordTableHeadByUser.cursor);
   const page = useAppSelector((state) => state.record.adminRecordTableHeadByUser.page);
   const perPage = useAppSelector((state) => state.record.adminRecordTableHeadByUser.perPage);
@@ -30,7 +22,16 @@ const Record: React.FC<props> = ({ onValid }) => {
   const startDate = useAppSelector((state) => state.record.adminRecordTableHeadByUser.startDate);
   const endDate = useAppSelector((state) => state.record.adminRecordTableHeadByUser.endDate);
 
-  const { data, isLoading } = useGetRecordsQuery({ page, perPage, sortKey, sortValue, endDate, searchTerm, startDate });
+  const { data, isLoading, isError, isFetching } = useGetRecordsQuery({
+    page,
+    perPage,
+    sortKey,
+    sortValue,
+    endDate,
+    searchTerm,
+    startDate,
+    isRefetch,
+  });
   const adminThead = useAppSelector((state) => [...state.record.adminRecordTableHeadByUser.thead]);
   const adminData = data?.data as unknown as recordWithUser[];
   const selectedList = useAppSelector((state) => state.record.adminRecordTableHeadByUser.selectedItemList);
@@ -77,6 +78,12 @@ const Record: React.FC<props> = ({ onValid }) => {
   ] = useDeleteManyRecordsMutation();
 
   useEffect(() => {
+    if (!isLoading && !isFetching && isError) {
+      toast.error('기록을 받아오지 못했습니다.');
+    }
+  }, [isError, isLoading, isFetching]);
+
+  useEffect(() => {
     if (!isDeleteManyLoading && isDeleteManySuccess) {
       toast.success('삭제가 완료되었습니다.');
       socket.emit('deleteRecords');
@@ -96,7 +103,7 @@ const Record: React.FC<props> = ({ onValid }) => {
   }, [selectedList, deleteRecordsMutation]);
 
   return (
-    <MainLayout title={pathname == '/search' ? <SearchForm onValid={onValid} /> : 'Record'}>
+    <>
       {isLoading ? (
         <div className="absolute inset-0 flex justify-center items-center">
           <Spinner classes="h-7 w-7" />
@@ -114,7 +121,7 @@ const Record: React.FC<props> = ({ onValid }) => {
               <Page
                 curPage={page}
                 curCursor={curCursor}
-                totalPage={data!.totalPage}
+                totalPage={data?.totalPage}
                 onPageClick={onPageClick}
                 onLastClick={onLastClick}
                 onNextCursor={onNextCursor}
@@ -127,7 +134,7 @@ const Record: React.FC<props> = ({ onValid }) => {
           />
         </div>
       )}
-    </MainLayout>
+    </>
   );
 };
 

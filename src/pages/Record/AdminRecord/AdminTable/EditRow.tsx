@@ -59,7 +59,11 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
       const startTime = new Date(`${value.date} ${value.startTime}`);
       const endTime = new Date(`${value.date} ${value.endTime}`);
 
-      if (!value.endTime) return editRecordMutation({ id, startTime });
+      if (!value.endTime) {
+        editRecordMutation({ id, startTime });
+        return;
+      }
+
       editRecordMutation({ id, startTime, endTime });
     },
     [id, editRecordMutation],
@@ -67,8 +71,9 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-      socket.emit('editRecord', { id: userId, date: watch('date') });
+      toast.success('근무기록 수정이 성공했습니다.');
       dispatch(toggleAdminOpenedItem(id));
+      socket.emit('editRecord', { id: userId, date: watch('date') });
     }
   }, [isLoading, userId, id, isSuccess, watch, dispatch]);
 

@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import Spinner from '@components/Spinner';
+import { useGetMyInfoQuery } from '@redux/services/userApi';
 
 const Login = React.lazy(() => import('@pages/Login'));
 const Join = React.lazy(() => import('@pages/Join'));
@@ -12,7 +13,7 @@ const Profile = React.lazy(() => import('@pages/Profile'));
 const ErrorFallback = React.lazy(() => import('@components/ErrorFallback'));
 
 const Routers = () => {
-  const isAdmin = true;
+  const { data } = useGetMyInfoQuery();
   return (
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -31,7 +32,7 @@ const Routers = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/avatar" element={<Profile />} />
             <Route path="/record" element={<Record />} />
-            {isAdmin && <Route path="/admin" element={<Admin />} />}
+            {data?.data.role === 'Manager' && <Route path="/admin" element={<Admin />} />}
           </Routes>
         </Suspense>
       </ErrorBoundary>
