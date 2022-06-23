@@ -3,10 +3,12 @@ from = "/*"
 to = "index.html"
 status = 200
 
-[build]
-  command = "npm run build"
-  publish = "build"
-
 [context.production.environment]
-  TOML_ENV_VAR = "From netlify.toml"
-  REACT_APP_TOML_ENV_VAR = "From netlify.toml (REACT_APP_)"
+API_ENDPOINT = "https://production.yourservice.net"
+
+[context.staging.environment]
+API_ENDPOINT = "https://staging.yourservice.net"`
+
+# no API server exists for other branches, but code will still want a URL here so need to set a "default"
+[context.branch-deploy.environment]
+API_ENDPOINT = "https://invalid"
