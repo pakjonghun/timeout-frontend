@@ -39,6 +39,7 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
     handleSubmit,
     getValues,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<editForm>({
     mode: 'onChange',
@@ -48,6 +49,12 @@ const EditRow: React.FC<props> = ({ id, userId, item }) => {
       endTime: item?.endTime ? getFullTime(new Date(item.endTime)) : '',
     },
   });
+
+  useEffect(() => {
+    if (item?.endTime) {
+      setValue('endTime', getFullTime(new Date(item.endTime)));
+    }
+  }, [item, setValue]);
 
   const onCancelClick = useCallback(() => {
     dispatch(toggleAdminOpenedItem(id));
