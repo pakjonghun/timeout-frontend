@@ -54,12 +54,12 @@ const Tbody: React.FC<props> = ({ tbody }) => {
     [deleteRecordMutation],
   );
 
-  // if (tbody == null || !tbody?.length) return null;
+  if (tbody == null || !tbody?.length) return null;
 
   return (
     <tbody className="font-medium text-gray-700 divide-y-[2px] divide-gray-100">
       {tbody?.map(({ id, startTime, endTime, description, user, duration, status }) => {
-        // if (id == null || !startTime || !description || !user) return null;
+        if (id == null || !startTime || !description || !user) return null;
         const startDate = new Date(startTime);
         const endDate = endTime ? new Date(endTime) : '-';
         const durationGetTime = getTime(duration);
