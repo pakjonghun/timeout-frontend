@@ -11,16 +11,22 @@ const usePublic = (isLogin?: boolean) => {
   const errorCount = useRef<number>(0);
 
   useEffect(() => {
+    if (!isFetching && !isLoading) {
+      if (errorCount.current) return;
+      //@ts-ignore
+      if (error?.status == 'PARSING_ERROR' || error?.status == 'FETCH_ERROR') {
+        errorCount.current++;
+        toast.error('서버 연결이 원활하지 않습니다.');
+        return;
+      }
+    }
+
     if (!isFetching && isSuccess) {
       if (isLogin) return;
       if (errorCount.current) return;
 
       errorCount.current++;
       //@ts-ignore
-      if (error?.status == 'PARSING_ERROR' || error?.status == 'FETCH_ERROR') {
-        toast.error('서버 연결이 원활하지 않습니다.');
-        return;
-      }
 
       toast.warn('이미 로그인 중입니다.');
       navigate('/');
